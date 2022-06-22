@@ -1,0 +1,15 @@
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\bin\Debug\net6.0\LoggerManager.deps.json
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\bin\Debug\net6.0\LoggerManager.dll
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\bin\Debug\net6.0\LoggerManager.pdb
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\bin\Debug\net6.0\Contracts.dll
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\bin\Debug\net6.0\Contracts.pdb
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\LoggerManager.csproj.AssemblyReference.cache
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\LoggerManager.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\LoggerManager.AssemblyInfoInputs.cache
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\LoggerManager.AssemblyInfo.cs
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\LoggerManager.csproj.CoreCompileInputs.cache
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\LoggerManager.csproj.CopyComplete
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\LoggerManager.dll
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\refint\LoggerManager.dll
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\LoggerManager.pdb
+C:\Users\Temo\source\repos\Altex_Task\LoggerManager\obj\Debug\net6.0\ref\LoggerManager.dll
