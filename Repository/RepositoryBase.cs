@@ -13,7 +13,6 @@ namespace Repository
             RepositoryContext = repositoryContext ?? throw new ArgumentNullException(nameof(repositoryContext));
         }
 
-
         public virtual void Create(T entity)
         {
             RepositoryContext.Set<T>().Add(entity);

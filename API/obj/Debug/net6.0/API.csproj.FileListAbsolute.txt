@@ -3,7 +3,6 @@ C:\Users\Temo\source\repos\Altex_Task\API\obj\Debug\net6.0\API.GeneratedMSBuildE
 C:\Users\Temo\source\repos\Altex_Task\API\obj\Debug\net6.0\API.AssemblyInfoInputs.cache
 C:\Users\Temo\source\repos\Altex_Task\API\obj\Debug\net6.0\API.AssemblyInfo.cs
 C:\Users\Temo\source\repos\Altex_Task\API\obj\Debug\net6.0\API.csproj.CoreCompileInputs.cache
-C:\Users\Temo\source\repos\Altex_Task\API\obj\Debug\net6.0\API.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Temo\source\repos\Altex_Task\API\obj\Debug\net6.0\API.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Temo\source\repos\Altex_Task\API\bin\Debug\net6.0\nlog.config
 C:\Users\Temo\source\repos\Altex_Task\API\bin\Debug\net6.0\appsettings.Development.json

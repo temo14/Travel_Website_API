@@ -26,15 +26,12 @@ namespace Entities.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("AppartmentId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -53,9 +50,6 @@ namespace Entities.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId")
-                        .IsUnique();
 
                     b.ToTable("Appartments");
                 });
@@ -93,6 +87,9 @@ namespace Entities.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("UserId");
 
+                    b.Property<Guid?>("AppartmentsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -118,22 +115,17 @@ namespace Entities.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppartmentsId");
+
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Entities.Models.Appartments", b =>
-                {
-                    b.HasOne("Entities.Models.User", "Owner")
-                        .WithOne("Appartments")
-                        .HasForeignKey("Entities.Models.Appartments", "OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Entities.Models.User", b =>
                 {
+                    b.HasOne("Entities.Models.Appartments", "Appartments")
+                        .WithMany()
+                        .HasForeignKey("AppartmentsId");
+
                     b.Navigation("Appartments");
                 });
 #pragma warning restore 612, 618

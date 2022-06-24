@@ -53,13 +53,23 @@ namespace Altex_Task.Controllers
 
         [HttpGet("{id}/getUser")]
 
-        public IActionResult GetUserById(Guid id)
+        public IActionResult GetUserById(Guid id = default)
         {
             try
             {
-                var user = _repositoryWrapper.User.GetUserById(id);
+                if (id == default)
+                {
+                    //get token from cookie in the request
+                    var token = Request.Cookies.FirstOrDefault(item => item.Key == "token");
+                    // decode the token
+                    var decoded_token = new JwtSecurityToken(token.Value);
+                    // get the userId from decoded token and turn it into a GUID
+                    id = Guid.Parse(decoded_token.Payload["id"] as string);
+                }
 
-                _loggerManager.LogInfo($"Returnd user with id: {id}");
+                // search user by userId
+                var user = _repositoryWrapper.User.GetUserById(id);
+                // send user as a response
                 return Ok(user);
             }
             catch (Exception ex)

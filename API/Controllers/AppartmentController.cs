@@ -24,11 +24,11 @@ namespace API.Controllers
         }
         [HttpPost]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
-        public IActionResult AddAppartment([FromBody]AppartmentCreationDto appartment)
+        public IActionResult AddAppartment([FromBody]AppartmentCreationDto apartment)
         {
             try
             {
-                var app = _mapper.Map<Appartments>(appartment);
+                var app = _mapper.Map<Appartments>(apartment);
                 _repositoryWrapper.Appartment.AddAppartment(app);
                 _repositoryWrapper.Save();
 
@@ -44,33 +44,42 @@ namespace API.Controllers
             }
         }
 
-        //[HttpPut("{id}")]
-        //[ServiceFilter(typeof(ValidationFilterAttribute))]
+        [HttpPut("updateAppartment")]
+        public IActionResult UpdateAppartment([FromBody]AppartmentCreationDto apartment)
+        {
+            try
+            {
 
-        //public IActionResult UpdateUser(Guid id, [FromBody] UserUpdateDto user)
-        //{
-        //    try
-        //    {
+                var app = _mapper.Map<Appartments>(apartment);
+                _repositoryWrapper.Appartment.Update(app);
+                _repositoryWrapper.Save();
 
-        //        var userEntity = _repositoryWrapper.User.GetUserById(id);
-        //        if (userEntity == null)
-        //        {
-        //            _loggerManager.LogError($"User with id: {id} not found");
-        //            return NotFound();
-        //        }
-        //        _mapper.Map(user, userEntity);
-        //        _repositoryWrapper.User.UpdateUser(userEntity);
-        //        _repositoryWrapper.Save();
-        //        return NoContent();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _loggerManager.LogError($"Something went wrong UpdateUser action: {ex.Message}");
-        //        return StatusCode(500, "Internal Server Error");
-        //    }
-        //}
+                _loggerManager.LogInfo($"Appartnent Updated");
 
+                return StatusCode(200, "Appartment Updated");
+            }
+            catch (Exception ex)
+            {
+                _loggerManager.LogError($"Something went wrong UpdateUser action: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        [HttpGet("AppartmentDetails")]
+        public IActionResult GetAppartmentDetails(Guid apartmentId)
+        {
+            try
+            {
+                var apartment = _repositoryWrapper.Appartment.GetAppartmentDetails(apartmentId);
 
+                _loggerManager.LogInfo($"Appartnent returned");
 
+                return StatusCode(200, "Appartment returned");
+            }
+            catch (Exception ex)
+            {
+                _loggerManager.LogError($"Something went wrong GetAppartmentById action: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
     }
 }

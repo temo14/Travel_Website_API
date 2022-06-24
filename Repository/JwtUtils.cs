@@ -52,7 +52,7 @@ namespace Repository
             }
             catch (Exception ex)
             {
-                throw new Exception("Something went wrong on ValidateToken");
+                throw new Exception($"Something went wrong on ValidateToken {ex.Message}");
             }
             
         }

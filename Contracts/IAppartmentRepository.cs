@@ -11,5 +11,6 @@ namespace Contracts
     {
         void AddAppartment(Appartments appartments);
         void UpdateAppartment(Appartments user);
+        AppartmentDetails GetAppartmentDetails(Guid appartmentId);
     }
 }

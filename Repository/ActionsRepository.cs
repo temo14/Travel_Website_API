@@ -16,23 +16,60 @@ namespace Repository
             _context = context;
         }
 
-        public void AddBook_Guest(BookingGuests service) => _context.BookingGuests.Add(service);
-        
-
-        public IEnumerable<Appartments> GetAppartments(SearchParameters search)
+        public void AddBook_Guest(BookingGuests service)
         {
-            var appartments = from a in _context.Appartments
-                     from d in _context.BookingGuests
-                     where d.From > search.From && d.To < search.To && d.HostId == a.OwnerId
-                     select a;
+            var item = _context.BookingGuests.FirstOrDefault(i => i.HostId == service.HostId && i.status==(Status)1
+                                                                && i.From < service.From && i.To > service.From);
+            if (item == null)
+            _context.BookingGuests.Add(service);
 
-            SearchByCity(ref appartments, search.City);
+            throw new Exception("Invalid date");
+        }
+        
+        
+                     //from d in _context.BookingGuests
+                     //where d.From > search.From && d.To < search.To && d.HostId == a.OwnerId
+                     //select a;
+        public IEnumerable<SearcResultAppartmentsDto> GetAppartments(SearchParameters search)
+        {
+            //var r = _context.Appartments.AsQueryable().OrderBy(i => i.Bookings.AsQueryable()
+            //.Where(x => x.From < search.From && x.To > search.From));
 
-            return _context.Appartments
-                .OrderBy(ci => ci.City == search.City)
+            //var e = _context.Appartments.SelectMany(i => i.Bookings.AsQueryable().Where(x => x.From < search.From && x.To > search.From));
+
+            var result = from app in _context.Appartments
+                         from date in _context.BookingGuests
+                         where date.HostId == app.OwnerId
+                         orderby date.From < search.From && date.To > search.From
+                         select new SearcResultAppartmentsDto
+                         {
+                             Address = app.Address,
+                             City = app.City,
+                             Description = app.Description,
+                             DistanceFromCenter = app.DistanceFromCenter,
+                             NumOfBeds = app.NumOfBeds,
+                             OwnerId = app.OwnerId,
+                             PhotoLocation = app.PhotoLocation,
+                             Avaliable = date.From < search.From && date.To > search.From
+                         };
+
+            SearchByCity(ref result, search.City);
+
+            ////r.OrderBy(i => i.status)
+            ////    .Join(_context.BookingGuests
+            ////    ,);
+
+            ////var appartments = r.Join(_context.BookingGuests,
+            ////    a => a.OwnerId,
+            ////    b => b.HostId,
+            ////    () => new { appartment = a });
+
+
+            return result.OrderBy(ci => ci.City == search.City)
                 .Skip((search.PageNumber - 1) * search.PageSize)
                 .Take(search.PageSize)
                 .ToList();
+            //return null;
         }
 
         public IEnumerable<ReturnBookingsDto>? GetBookings(Guid Id)
@@ -76,15 +113,42 @@ namespace Repository
 
         public void Updatebookings_guests(Guid id, string status)
         {
-            var item = _context.BookingGuests.FirstOrDefault(i => i.Id == id);
+            var request = _context.BookingGuests.FirstOrDefault(i => i.Id == id);
 
+            if (request == null) throw new NullReferenceException($"Id - {id} doesnot exists");
+
+            if(status.Equals((Status)2))
+            {
+                _context.BookingGuests.Remove(request);
+                return;
+            }
+            request.status = (Status)Enum.Parse(typeof(Status), status);
+
+            //var appartment = _context.Appartments.FirstOrDefault(i => i.OwnerId == request.HostId);
+
+            //appartment.Bookings.Add(request);
+            //appartment.Avaliability(request.From, request.To);
+            
+            //appartment.From = request.From;
+            //appartment.To = request.To;
+
+            //_context.BookingGuests.Remove(request);
         }
 
-        private void SearchByCity(ref IQueryable<Appartments> apps, string? city)
+        IEnumerable<Appartments> IActions.GetAppartments(SearchParameters search)
         {
-            if (!apps.Any() || string.IsNullOrEmpty(city)) return;
-
-            apps = apps.Where(a => a.City.ToLower().Contains(city.Trim().ToLower()));
+            throw new NotImplementedException();
         }
+
+        private void SearchByCity(ref IQueryable<SearcResultAppartmentsDto> apps, string? city)
+        {
+            if (!apps.Any() || string.IsNullOrEmpty(city))
+            {
+                apps = apps.Where(x => x.City.StartsWith(city) || city == null);
+            }
+
+            apps = apps.Where(a => a.City.ToLower().Contains(city.Trim().ToLower())) ;
+        }
+
     }
 }

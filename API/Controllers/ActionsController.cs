@@ -1,6 +1,7 @@
 ﻿using API.ActionFilters;
 using AutoMapper;
 using Contracts;
+using Entities.DataTransferObjects;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,13 @@ namespace API.Controllers
     {
         private readonly ILoggerManager _loggerManager;
         private readonly IRepositoryWrapper _repositoryWrapper;
+        private readonly IMapper _mapper;
 
-        public ActionsController(ILoggerManager loggerManager, IRepositoryWrapper repositoryWrapper)
+        public ActionsController(ILoggerManager loggerManager, IRepositoryWrapper repositoryWrapper, IMapper mapper)
         {
             _loggerManager = loggerManager;
             _repositoryWrapper = repositoryWrapper;
+            _mapper = mapper;
         }
         [HttpGet("MyBookings")]
         public IActionResult GetBookings([FromQuery]Guid id)
@@ -67,8 +70,8 @@ namespace API.Controllers
             try
             {
 
-                _loggerManager.LogError("From date cannot be greater then To");
-                return BadRequest("Ivalid Dates");
+                //_loggerManager.LogError("From date cannot be greater then To");
+                //return BadRequest("Ivalid Dates");
                 
                 var apps = _repositoryWrapper.Actions.GetAppartments(parameters);
                 _loggerManager.LogInfo($"Appartments succesfully returned");
@@ -82,11 +85,13 @@ namespace API.Controllers
         }
         [HttpPost("AddBookingGuests")]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
-        public IActionResult AddBookingGuests([FromBody]BookingGuests service)
+        public IActionResult AddBookingGuests([FromBody] BookingGuestAddDto service)
         {
             try
             {
-                _repositoryWrapper.Actions.AddBook_Guest(service);
+                var item = _mapper.Map<BookingGuests>(service);
+
+                _repositoryWrapper.Actions.AddBook_Guest(item);
                 _repositoryWrapper.Save();
 
                 _loggerManager.LogInfo($"Booking_Guests Added");
@@ -96,6 +101,29 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong on AddBookingGuests action: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        [HttpPut("UpdateStatus")]
+        public IActionResult UpdateBookingGuests(Guid id, string status)
+        {
+            try
+            {
+                if(id != Guid.Empty && !string.IsNullOrEmpty(status))
+                {
+                    _repositoryWrapper.Actions.Updatebookings_guests(id, status);
+                    _repositoryWrapper.Save();
+                    _loggerManager.LogInfo($"Status {id} updated");
+
+                    return StatusCode(200,"Status Updated");
+                }
+                _loggerManager.LogWarn($"Invalid {id} status update Parametres");
+                return StatusCode(500, "Invalid Parametrs");
+                
+            }
+            catch (Exception ex)
+            {
+                _loggerManager.LogError($"Something went wrong on UpdateBookingGuests action: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
         }

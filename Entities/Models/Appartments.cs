@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,22 +11,21 @@ namespace Entities.Models
 {
     public class Appartments
     {
-        [Column("AppartmentId")]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "City created is required")]
         public string? City { get; set; }
-
-        [Required(ErrorMessage = "Adress created is required")]
         public string? Address { get; set; }
         public int NumOfBeds { get; set; }
         public string? PhotoLocation { get; set; }
         public string? DistanceFromCenter { get; set; }
         public string? Description { get; set; }
 
-        [ForeignKey(nameof(Owner))]
+        [ForeignKey(nameof(OwnerId))]
         public Guid OwnerId { get; set; }
-        public User? Owner { get; set; }
+        public bool Pool { get; set; } = false;
+        public bool Gym { get; set; } = false;
+        public bool Wifi { get; set; } = false;
+        public bool Parking { get; set; } = false;
 
     }
 }

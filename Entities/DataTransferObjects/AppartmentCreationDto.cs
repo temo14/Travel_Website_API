@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Entities.Helper;
+using Entities.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entities.DataTransferObjects
 {
@@ -19,6 +16,9 @@ namespace Entities.DataTransferObjects
         public string? DistanceFromCenter { get; set; }
         public string? Description { get; set; }
         public Guid OwnerId { get; set; }
-
+        public bool Pool { get; set; } = false;
+        public bool Gym { get; set; } = false;
+        public bool Wifi { get; set; } = false;
+        public bool Parking { get; set; } = false;
     }
 }
