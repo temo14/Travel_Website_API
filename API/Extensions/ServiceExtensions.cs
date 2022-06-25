@@ -15,10 +15,10 @@ namespace AccountOwnerServer.Extensions
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
+                options.AddPolicy("*",
+                    builder => builder.WithOrigins("http://localhost:3000")
                     .AllowAnyMethod()
-                    .AllowAnyHeader());
+                    .AllowAnyHeader().AllowCredentials());
             });
         }
 

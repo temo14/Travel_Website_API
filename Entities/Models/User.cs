@@ -27,7 +27,7 @@ namespace Entities.Models
         public string? Password { get; set; }
         public string? Description { get; set; }
 
-        public Appartments? Appartments { get; set; }
+        public Apartments? Apartments { get; set; }
 
     }
 }

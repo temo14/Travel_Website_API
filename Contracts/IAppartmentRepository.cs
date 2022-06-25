@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Contracts
 {
-    public interface IAppartmentRepository : IRepositoryBase<Appartments>
+    public interface IApartmentRepository : IRepositoryBase<Apartments>
     {
-        void AddAppartment(Appartments appartments);
-        void UpdateAppartment(Appartments user);
-        AppartmentDetails GetAppartmentDetails(Guid appartmentId);
+        void AddApartment(Apartments appartments);
+        void UpdateApartment(Apartments user);
+        ApartmentDetails GetApartmentDetails(Guid appartmentId);
     }
 }

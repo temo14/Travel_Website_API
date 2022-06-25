@@ -28,6 +28,17 @@ namespace API.Controllers
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
         }
+        public Guid GetUserIdFromCookie(HttpRequest Request)
+        {
+            
+                //get token from cookie in the request
+                var token = Request.Cookies.First(item => item.Key == "token");
+                // decode the token
+                var decoded_token = new JwtSecurityToken(token.Value);
+                // get the userId from decoded token and turn it into a GUID
+                var userId = Guid.Parse(decoded_token.Payload["id"] as string);
+            return userId;
+        }
         [HttpGet("MyBookings")]
         public IActionResult GetBookings([FromQuery]Guid id)
         {
@@ -45,6 +56,7 @@ namespace API.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
         [HttpGet("MyGuests")]
         public IActionResult GetGuests([FromQuery] Guid id)
         {
@@ -62,9 +74,27 @@ namespace API.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
-        [HttpGet("search")]
+        //[ServiceFilter(typeof(ValidationFilterAttribute))]
+        [HttpGet("profile")]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
 
+        public IActionResult GetUserProfile()
+        {
+            try
+            {
+                var userId = GetUserIdFromCookie(Request);
+                // search user by userId
+                var user= _repositoryWrapper.User.GetUserById(userId);
+                // send user as a response
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                _loggerManager.LogError($"Something went wrong CreateUser action: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        [HttpGet("search")]
         public IActionResult Search([FromQuery]SearchParameters parameters)
         {
             try
@@ -73,8 +103,8 @@ namespace API.Controllers
                 //_loggerManager.LogError("From date cannot be greater then To");
                 //return BadRequest("Ivalid Dates");
                 
-                var apps = _repositoryWrapper.Actions.GetAppartments(parameters);
-                _loggerManager.LogInfo($"Appartments succesfully returned");
+                var apps = _repositoryWrapper.Actions.GetApartments(parameters);
+                _loggerManager.LogInfo($"Apartments succesfully returned");
                 return Ok(apps);
             }
             catch (Exception ex)

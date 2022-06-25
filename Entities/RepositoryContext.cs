@@ -14,7 +14,7 @@ namespace Entities
         {
                 
         }
-        public DbSet<Appartments> Appartments { get; set; }
+        public DbSet<Apartments> Apartments { get; set; }
         public DbSet<BookingGuests> BookingGuests { get; set; }
         public DbSet<User> Users { get; set; }
 

@@ -5,7 +5,7 @@ namespace Contracts
 {
     public interface IActions
     {
-        IEnumerable<Appartments> GetAppartments(SearchParameters search);
+        IEnumerable<Apartments> GetApartments(SearchParameters search);
         void AddBook_Guest(BookingGuests service);
         void Updatebookings_guests(Guid id, string status);
         IEnumerable<ReturnGuestsDto>? GetGuests(Guid Id);

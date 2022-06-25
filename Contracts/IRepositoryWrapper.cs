@@ -9,7 +9,7 @@ namespace Contracts
     public interface IRepositoryWrapper
     {
         IUserRepository User { get; }
-        IAppartmentRepository Appartment { get; }
+        IApartmentRepository Apartment { get; }
         IActions Actions { get; }
         IJwtUtils JWT { get; }
         void Save();

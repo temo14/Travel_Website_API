@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities.DataTransferObjects
 {
-    public class SearcResultAppartmentsDto
+    public class SearcResultApartmentsDto
     {
         public Guid Id { get; set; }
         public string? City { get; set; }

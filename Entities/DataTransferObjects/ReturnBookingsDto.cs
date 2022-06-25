@@ -10,7 +10,7 @@ namespace Entities.DataTransferObjects
 {
     public class ReturnBookingsDto
     {
-        public Appartments? appartment { get; set; }
+        public Apartments? appartment { get; set; }
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
         public Status status { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Models
 {
-    public class Appartments
+    public class Apartments
     {
         public Guid Id { get; set; }
 

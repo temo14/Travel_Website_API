@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Entities.Models
 {
-    public class AppartmentDetails
+    public class ApartmentDetails
     {
-        public Appartments? Apartment { get; set; }
+        public Apartments? Apartment { get; set; }
 
         public IQueryable<AvaliabilityInfo> Avalibilities { get; set; }
     }

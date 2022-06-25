@@ -11,7 +11,7 @@ namespace Repository
     public class RepositoryWrapper : IRepositoryWrapper
     {
         private RepositoryContext _context;
-        private IAppartmentRepository _appartmentRepository;
+        private IApartmentRepository _appartmentRepository;
         private IUserRepository _userRepository;
         private IActions _actions;
         private IJwtUtils _jwt;
@@ -49,12 +49,12 @@ namespace Repository
             } 
         }
 
-        public IAppartmentRepository Appartment
+        public IApartmentRepository Apartment
         {
             get
             {
                 if (_appartmentRepository == null)
-                    _appartmentRepository = new AppartmentRepository(_context);
+                    _appartmentRepository = new ApartmentRepository(_context);
                 return _appartmentRepository;
             }
         }

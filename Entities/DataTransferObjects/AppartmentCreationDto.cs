@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Entities.DataTransferObjects
 {
-    public class AppartmentCreationDto
+    public class ApartmentCreationDto
     {
         [Required(ErrorMessage = "City created is required")]
         public string? City { get; set; }

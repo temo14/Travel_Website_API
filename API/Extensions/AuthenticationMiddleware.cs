@@ -21,10 +21,7 @@ namespace API.Extensions
         public async Task Invoke(HttpContext context, IRepositoryWrapper repository)
         {
             //Get the upload token, which can be customized and extended
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last()
-                        ?? context.Request.Headers["X-Token"].FirstOrDefault()
-                        ?? context.Request.Query["Token"].FirstOrDefault()
-                        ?? context.Request.Cookies["Token"];
+            var token = context.Request.Cookies["Token"];
 
             var endpoint = context.GetEndpoint();
             if (endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() is object)
@@ -39,25 +36,25 @@ namespace API.Extensions
                 return;
             }
 
-            var userId = repository.JWT.ValidateToken(token);
+            var isValid = repository.JWT.ValidateToken(token);
 
-            if (userId != null)
-            {
-                context.Items["User"] = repository.User.GetUserById(Guid.Parse(userId));
+            if (!isValid) return;
+            //{
+            //    context.Items["User"] = repository.User.GetUserById(Guid.Parse(userId));
 
-            }
-            else
-            {
-                context.Response.StatusCode = 400;
-                await context.Response.WriteAsync("Invalid username or password.");
-            }
+            //}
+            //else
+            //{
+            //    context.Response.StatusCode = 400;
+            //    await context.Response.WriteAsync("Invalid username or password.");
+            //}
 
-            var claim = new ClaimsIdentity(new Claim[] { new Claim("Id", userId) },
-                CookieAuthenticationDefaults.AuthenticationScheme);
+            //var claim = new ClaimsIdentity(new Claim[] { new Claim("Id", userId) },
+            //    CookieAuthenticationDefaults.AuthenticationScheme);
 
-            context.User = new ClaimsPrincipal(claim);
+            //context.User = new ClaimsPrincipal(claim);
 
-            await context.AuthenticateAsync();
+            //await context.AuthenticateAsync();
 
             await _next(context);
         }

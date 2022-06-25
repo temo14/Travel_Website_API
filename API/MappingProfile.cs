@@ -10,7 +10,7 @@ namespace API
         {
             CreateMap<UserCreationDto, User>();
             CreateMap<UserUpdateDto, User>();
-            CreateMap<AppartmentCreationDto,Appartments>();
+            CreateMap<ApartmentCreationDto,Apartments>();
             CreateMap<BookingGuestAddDto,BookingGuests>();
         }
         

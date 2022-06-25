@@ -30,18 +30,18 @@ namespace Repository
                      //from d in _context.BookingGuests
                      //where d.From > search.From && d.To < search.To && d.HostId == a.OwnerId
                      //select a;
-        public IEnumerable<SearcResultAppartmentsDto> GetAppartments(SearchParameters search)
+        public IEnumerable<SearcResultApartmentsDto> GetApartments(SearchParameters search)
         {
-            //var r = _context.Appartments.AsQueryable().OrderBy(i => i.Bookings.AsQueryable()
+            //var r = _context.Apartments.AsQueryable().OrderBy(i => i.Bookings.AsQueryable()
             //.Where(x => x.From < search.From && x.To > search.From));
 
-            //var e = _context.Appartments.SelectMany(i => i.Bookings.AsQueryable().Where(x => x.From < search.From && x.To > search.From));
+            //var e = _context.Apartments.SelectMany(i => i.Bookings.AsQueryable().Where(x => x.From < search.From && x.To > search.From));
 
-            var result = from app in _context.Appartments
+            var result = from app in _context.Apartments
                          from date in _context.BookingGuests
                          where date.HostId == app.OwnerId
                          orderby date.From < search.From && date.To > search.From
-                         select new SearcResultAppartmentsDto
+                         select new SearcResultApartmentsDto
                          {
                              Address = app.Address,
                              City = app.City,
@@ -77,7 +77,7 @@ namespace Repository
             var bookings = _context.BookingGuests.Where(o => o.GuestId == Id);
             if (bookings != null)
             {
-                return from a in _context.Appartments.AsEnumerable()
+                return from a in _context.Apartments.AsEnumerable()
                        join b in bookings
                        on a.OwnerId equals b.HostId
                        select new ReturnBookingsDto()
@@ -124,7 +124,7 @@ namespace Repository
             }
             request.status = (Status)Enum.Parse(typeof(Status), status);
 
-            //var appartment = _context.Appartments.FirstOrDefault(i => i.OwnerId == request.HostId);
+            //var appartment = _context.Apartments.FirstOrDefault(i => i.OwnerId == request.HostId);
 
             //appartment.Bookings.Add(request);
             //appartment.Avaliability(request.From, request.To);
@@ -135,12 +135,12 @@ namespace Repository
             //_context.BookingGuests.Remove(request);
         }
 
-        IEnumerable<Appartments> IActions.GetAppartments(SearchParameters search)
+        IEnumerable<Apartments> IActions.GetApartments(SearchParameters search)
         {
             throw new NotImplementedException();
         }
 
-        private void SearchByCity(ref IQueryable<SearcResultAppartmentsDto> apps, string? city)
+        private void SearchByCity(ref IQueryable<SearcResultApartmentsDto> apps, string? city)
         {
             if (!apps.Any() || string.IsNullOrEmpty(city))
             {

@@ -53,7 +53,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.All
 });
 
-app.UseCors("CorsPolicy");
+app.UseCors("*");
 
 
 app.UseRouting();

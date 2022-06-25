@@ -10,13 +10,13 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class AppartmentController : ControllerBase
+    public class ApartmentController : ControllerBase
     {
         private readonly ILoggerManager _loggerManager;
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IMapper _mapper;
 
-        public AppartmentController(ILoggerManager loggerManager, IRepositoryWrapper repositoryWrapper, IMapper mapper)
+        public ApartmentController(ILoggerManager loggerManager, IRepositoryWrapper repositoryWrapper, IMapper mapper)
         {
             _loggerManager = loggerManager;
             _repositoryWrapper = repositoryWrapper;
@@ -24,39 +24,39 @@ namespace API.Controllers
         }
         [HttpPost]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
-        public IActionResult AddAppartment([FromBody]AppartmentCreationDto apartment)
+        public IActionResult AddApartment([FromBody]ApartmentCreationDto apartment)
         {
             try
             {
-                var app = _mapper.Map<Appartments>(apartment);
-                _repositoryWrapper.Appartment.AddAppartment(app);
+                var app = _mapper.Map<Apartments>(apartment);
+                _repositoryWrapper.Apartment.AddApartment(app);
                 _repositoryWrapper.Save();
 
                 _loggerManager.LogInfo($"Appartnent Added");
 
-                return StatusCode(200,"Appartment Added");
+                return StatusCode(200,"Apartment Added");
 
             }
             catch (Exception ex)
             {
-                _loggerManager.LogError($"Something went wrong on AddAppartment action: {ex.Message}");
+                _loggerManager.LogError($"Something went wrong on AddApartment action: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
         }
 
-        [HttpPut("updateAppartment")]
-        public IActionResult UpdateAppartment([FromBody]AppartmentCreationDto apartment)
+        [HttpPut("updateApartment")]
+        public IActionResult UpdateApartment([FromBody]ApartmentCreationDto apartment)
         {
             try
             {
 
-                var app = _mapper.Map<Appartments>(apartment);
-                _repositoryWrapper.Appartment.Update(app);
+                var app = _mapper.Map<Apartments>(apartment);
+                _repositoryWrapper.Apartment.Update(app);
                 _repositoryWrapper.Save();
 
                 _loggerManager.LogInfo($"Appartnent Updated");
 
-                return StatusCode(200, "Appartment Updated");
+                return StatusCode(200, "Apartment Updated");
             }
             catch (Exception ex)
             {
@@ -64,20 +64,20 @@ namespace API.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
-        [HttpGet("AppartmentDetails")]
-        public IActionResult GetAppartmentDetails(Guid apartmentId)
+        [HttpGet("ApartmentDetails")]
+        public IActionResult GetApartmentDetails(Guid apartmentId)
         {
             try
             {
-                var apartment = _repositoryWrapper.Appartment.GetAppartmentDetails(apartmentId);
+                var apartment = _repositoryWrapper.Apartment.GetApartmentDetails(apartmentId);
 
                 _loggerManager.LogInfo($"Appartnent returned");
 
-                return StatusCode(200, "Appartment returned");
+                return StatusCode(200, "Apartment returned");
             }
             catch (Exception ex)
             {
-                _loggerManager.LogError($"Something went wrong GetAppartmentById action: {ex.Message}");
+                _loggerManager.LogError($"Something went wrong GetApartmentById action: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
         }

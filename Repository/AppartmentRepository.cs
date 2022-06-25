@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    internal class AppartmentRepository :RepositoryBase<Appartments>, IAppartmentRepository
+    internal class ApartmentRepository :RepositoryBase<Apartments>, IApartmentRepository
     {
-        public AppartmentRepository(RepositoryContext context) : base(context)
+        public ApartmentRepository(RepositoryContext context) : base(context)
         {
 
         }
 
-        public void AddAppartment(Appartments appartments) => Create(appartments);
+        public void AddApartment(Apartments appartments) => Create(appartments);
 
-        public AppartmentDetails GetAppartmentDetails(Guid appartmentId)
+        public ApartmentDetails GetApartmentDetails(Guid appartmentId)
         {
-            var apartment = RepositoryContext.Appartments.FirstOrDefault(x => x.Id == appartmentId);
+            var apartment = RepositoryContext.Apartments.FirstOrDefault(x => x.Id == appartmentId);
             if (apartment == null) throw new ArgumentNullException("Apartment doesnot exists");
 
             var avaliabilty = from bg in RepositoryContext.BookingGuests
@@ -33,9 +33,9 @@ namespace Repository
                                   From = bg.From,
                                   To = bg.To
                               };
-            return new AppartmentDetails() { Apartment = apartment, Avalibilities = avaliabilty };
+            return new ApartmentDetails() { Apartment = apartment, Avalibilities = avaliabilty };
         }
 
-        public void UpdateAppartment(Appartments appartments) => Update(appartments);
+        public void UpdateApartment(Apartments appartments) => Update(appartments);
     }
 }
