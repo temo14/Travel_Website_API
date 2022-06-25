@@ -78,21 +78,38 @@ namespace Altex_Task.Controllers
                 return StatusCode(500, "Internal Server Error"); 
             }
         }
-        [HttpPut("{id}/updateUser")]
+        [HttpPut("updateUser")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
 
-        public IActionResult UpdateUser(Guid id, [FromBody]UserUpdateDto user)
+        public IActionResult UpdateUser([FromBody]UserUpdateDto user)
         {
             try
             {
             
-                var userEntity = _repositoryWrapper.User.GetUserById(id);
+                var userEntity = Request.HttpContext.Items["User"] as User;
                 if (userEntity == null)
                 {
-                    _loggerManager.LogError($"User with id: {id} not found");
+                    _loggerManager.LogError($"User not found");
                     return NotFound();
                 }
-                _mapper.Map(user, userEntity);
+            if (user.FirstName != null && user.FirstName != "")
+            {
+                userEntity.FirstName = user.FirstName;
+            }
+            if (user.Image != null && user.Image != "")
+            {
+                userEntity.Image = user.Image;
+            }
+            if (user.LastName != null && user.LastName != "")
+            {
+                userEntity.LastName = user.LastName;
+            }
+            if (user.Email != null && user.Email != "")
+            {
+                userEntity.Email = user.Email;
+            }
+                userEntity.Description = user.Description;
+                //_mapper.Map(user, userEntity);
                 _repositoryWrapper.User.UpdateUser(userEntity);
                 _repositoryWrapper.Save();
                 return NoContent();

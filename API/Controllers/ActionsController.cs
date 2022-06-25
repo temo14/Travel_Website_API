@@ -28,19 +28,9 @@ namespace API.Controllers
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
         }
-        public Guid GetUserIdFromCookie(HttpRequest Request)
-        {
-            
-                //get token from cookie in the request
-                var token = Request.Cookies.First(item => item.Key == "token");
-                // decode the token
-                var decoded_token = new JwtSecurityToken(token.Value);
-                // get the userId from decoded token and turn it into a GUID
-                var userId = Guid.Parse(decoded_token.Payload["id"] as string);
-            return userId;
-        }
+
         [HttpGet("MyBookings")]
-        public IActionResult GetBookings([FromQuery]Guid id)
+        public IActionResult GetBookings([FromQuery] Guid id)
         {
             try
             {
@@ -76,17 +66,11 @@ namespace API.Controllers
         }
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpGet("profile")]
-        //[ServiceFilter(typeof(ValidationFilterAttribute))]
-
         public IActionResult GetUserProfile()
         {
             try
             {
-                var userId = GetUserIdFromCookie(Request);
-                // search user by userId
-                var user= _repositoryWrapper.User.GetUserById(userId);
-                // send user as a response
-                return Ok(user);
+                return Ok(Request.HttpContext.Items["User"]);
             }
             catch (Exception ex)
             {
@@ -160,7 +144,6 @@ namespace API.Controllers
 
         [HttpPost, Route("login")]
         [AllowAnonymous]
-        //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult Login([FromBody]LoginModel login)
         {
             try
@@ -173,9 +156,12 @@ namespace API.Controllers
 
                 _loggerManager.LogInfo($"User {login.Email} authorized sucessfully");
 
-                Response.Cookies.Append("Token", tokenString, new CookieOptions
+                Response.Cookies.Append("token", tokenString, new CookieOptions
                 {
                     HttpOnly = true,
+                                        Expires = DateTimeOffset.UtcNow.AddHours(7),
+                    Secure=true,
+                    SameSite=SameSiteMode.None
                 });
 
                 return Ok(new { Token = tokenString, ExpireAt = DateTime.UtcNow.AddHours(7) });

@@ -17,21 +17,26 @@ namespace Repository
 
         public User GetUserById(Guid userId)
         {
-            return RepositoryContext.Users.Where(user => user.Id.Equals(userId)).FirstOrDefault()?? 
+            return RepositoryContext.Users.Where(user => user.Id.Equals(userId)).FirstOrDefault() ??
                 throw new NullReferenceException("User doesnot exists");
         }
 
         public User Login(LoginModel user)
         {
-            var acc = RepositoryContext.Users.FirstOrDefault(u => u.Email.ToLower() == user.Email.ToLower());
+            var acc = RepositoryContext.Users.FirstOrDefault(u => u.Email.ToLower() == user.Email.ToLower()
+            &&u.Password.ToLower()==user.Password.ToLower());
 
             if (acc != null || acc.Password == user.Password) return acc;
 
             throw new NullReferenceException();
         }
-        
 
-        public void UpdateUser(User user) => RepositoryContext.Users.Update(user);
+
+        public void UpdateUser(User user)  {
+            //var userProfile = RepositoryContext.Users.First(u => u.Id == user.Id);
+            //RepositoryContext.SaveChanges();
+            RepositoryContext.Users.Update(user);
+        }
         
     }
 }

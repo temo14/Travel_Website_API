@@ -10,6 +10,6 @@ namespace Contracts
     public interface IJwtUtils
     {
         public string GenerateToken(User user);
-        public bool ValidateToken(string token);
+        public string ValidateToken(string token);
     }
 }

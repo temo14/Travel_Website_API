@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Entities.Migrations
+namespace API.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20220624184836_MyFirstMigration15")]
-    partial class MyFirstMigration15
+    [Migration("20220625062439_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,14 +42,26 @@ namespace Entities.Migrations
                     b.Property<string>("DistanceFromCenter")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Gym")
+                        .HasColumnType("bit");
+
                     b.Property<int>("NumOfBeds")
                         .HasColumnType("int");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Parking")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PhotoLocation")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Pool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Wifi")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

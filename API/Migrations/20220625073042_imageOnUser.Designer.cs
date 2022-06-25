@@ -4,16 +4,18 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Entities.Migrations
+namespace API.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20220625073042_imageOnUser")]
+    partial class imageOnUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,14 +42,26 @@ namespace Entities.Migrations
                     b.Property<string>("DistanceFromCenter")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Gym")
+                        .HasColumnType("bit");
+
                     b.Property<int>("NumOfBeds")
                         .HasColumnType("int");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Parking")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PhotoLocation")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Pool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Wifi")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -102,6 +116,9 @@ namespace Entities.Migrations
                         .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()

@@ -39,7 +39,7 @@ namespace AccountOwnerServer.Extensions
         {
             services.AddDbContext<TDbContext>(option =>
             {
-                option.UseSqlServer(connectionString);
+                option.UseSqlServer(connectionString,b=>b.MigrationsAssembly("API"));
             });
         }
         public static void ConfigureJWT(this IServiceCollection services)

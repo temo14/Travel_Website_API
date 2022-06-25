@@ -28,7 +28,7 @@ namespace Repository
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return tokenString;
         }
-        public bool ValidateToken(string token)
+        public string ValidateToken(string token)
         {
             try
             {
@@ -46,9 +46,9 @@ namespace Repository
 
                 //var jwtToken = (JwtSecurityToken)validatedToken;
                 //var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
-
-                if (validatedToken.Id == null) throw new Exception("Invalid Token");
-                return true;
+                var userId = (validatedToken as JwtSecurityToken).Payload.First(pay => pay.Key == "id").Value.ToString();
+                if (userId == null) throw new Exception("invalid authorization");
+                return userId;
             }
             catch (Exception ex)
             {

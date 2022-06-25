@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Entities.Migrations
+namespace API.Migrations
 {
-    public partial class MyFirstMigration15 : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,7 +20,11 @@ namespace Entities.Migrations
                     PhotoLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DistanceFromCenter = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Pool = table.Column<bool>(type: "bit", nullable: false),
+                    Gym = table.Column<bool>(type: "bit", nullable: false),
+                    Wifi = table.Column<bool>(type: "bit", nullable: false),
+                    Parking = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

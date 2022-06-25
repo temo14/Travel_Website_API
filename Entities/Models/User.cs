@@ -25,6 +25,8 @@ namespace Entities.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string? Password { get; set; }
+
+        public string? Image { get; set; }
         public string? Description { get; set; }
 
         public Apartments? Apartments { get; set; }
