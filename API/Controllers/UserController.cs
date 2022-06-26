@@ -4,12 +4,8 @@ using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Principal;
-using System.Text;
 
 namespace Altex_Task.Controllers
 {
@@ -53,7 +49,7 @@ namespace Altex_Task.Controllers
 
         [HttpGet("{id}/getUser")]
 
-        public IActionResult GetUserById(Guid id = default)
+        public IActionResult GetProfile(Guid id = default)
         {
             try
             {
@@ -68,7 +64,7 @@ namespace Altex_Task.Controllers
                 }
 
                 // search user by userId
-                var user = _repositoryWrapper.User.GetUserById(id);
+                var user = _repositoryWrapper.User.GetProfile(id);
                 // send user as a response
                 return Ok(user);
             }
@@ -85,8 +81,7 @@ namespace Altex_Task.Controllers
         {
             try
             {
-            
-                var userEntity = _repositoryWrapper.User.GetUserById(id);
+                var userEntity = _repositoryWrapper.User.GetProfile(id);
                 if (userEntity == null)
                 {
                     _loggerManager.LogError($"User with id: {id} not found");

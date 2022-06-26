@@ -72,3 +72,5 @@ C:\Users\Temo\source\repos\Altex_Task\API\bin\Debug\net6.0\Microsoft.EntityFrame
 C:\Users\Temo\source\repos\Altex_Task\API\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\Temo\source\repos\Altex_Task\API\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\Temo\source\repos\Altex_Task\API\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Temo\source\repos\Altex_Task\API\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Temo\source\repos\Altex_Task\API\obj\Debug\net6.0\API.MvcApplicationPartsAssemblyInfo.cs

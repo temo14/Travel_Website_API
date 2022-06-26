@@ -1,11 +1,12 @@
 ﻿using Entities.DataTransferObjects;
+using Entities.Helper;
 using Entities.Models;
 
 namespace Contracts
 {
     public interface IActions
     {
-        IEnumerable<Appartments> GetAppartments(SearchParameters search);
+        PagedList<SearcResultAppartmentsDto> GetAppartments(SearchParameters search);
         void AddBook_Guest(BookingGuests service);
         void Updatebookings_guests(Guid id, string status);
         IEnumerable<ReturnGuestsDto>? GetGuests(Guid Id);

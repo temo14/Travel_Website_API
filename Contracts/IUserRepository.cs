@@ -9,7 +9,7 @@ namespace Contracts
 {
     public interface IUserRepository : IRepositoryBase<User>
     {
-        User GetUserById(Guid userId);
+        User GetProfile(Guid userId);
         void CreateUser(User user);
         void UpdateUser(User user);
         User Login(LoginModel user);

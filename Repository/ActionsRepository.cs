@@ -25,18 +25,9 @@ namespace Repository
 
             throw new Exception("Invalid date");
         }
-        
-        
-                     //from d in _context.BookingGuests
-                     //where d.From > search.From && d.To < search.To && d.HostId == a.OwnerId
-                     //select a;
-        public IEnumerable<SearcResultAppartmentsDto> GetAppartments(SearchParameters search)
+
+        public PagedList<SearcResultAppartmentsDto> GetAppartments(SearchParameters search)
         {
-            //var r = _context.Appartments.AsQueryable().OrderBy(i => i.Bookings.AsQueryable()
-            //.Where(x => x.From < search.From && x.To > search.From));
-
-            //var e = _context.Appartments.SelectMany(i => i.Bookings.AsQueryable().Where(x => x.From < search.From && x.To > search.From));
-
             var result = from app in _context.Appartments
                          from date in _context.BookingGuests
                          where date.HostId == app.OwnerId
@@ -55,21 +46,10 @@ namespace Repository
 
             SearchByCity(ref result, search.City);
 
-            ////r.OrderBy(i => i.status)
-            ////    .Join(_context.BookingGuests
-            ////    ,);
-
-            ////var appartments = r.Join(_context.BookingGuests,
-            ////    a => a.OwnerId,
-            ////    b => b.HostId,
-            ////    () => new { appartment = a });
 
 
-            return result.OrderBy(ci => ci.City == search.City)
-                .Skip((search.PageNumber - 1) * search.PageSize)
-                .Take(search.PageSize)
-                .ToList();
-            //return null;
+            return PagedList<SearcResultAppartmentsDto>.ToPagedList(result,
+                search.PageNumber, search.PageSize);
         }
 
         public IEnumerable<ReturnBookingsDto>? GetBookings(Guid Id)
@@ -124,20 +104,6 @@ namespace Repository
             }
             request.status = (Status)Enum.Parse(typeof(Status), status);
 
-            //var appartment = _context.Appartments.FirstOrDefault(i => i.OwnerId == request.HostId);
-
-            //appartment.Bookings.Add(request);
-            //appartment.Avaliability(request.From, request.To);
-            
-            //appartment.From = request.From;
-            //appartment.To = request.To;
-
-            //_context.BookingGuests.Remove(request);
-        }
-
-        IEnumerable<Appartments> IActions.GetAppartments(SearchParameters search)
-        {
-            throw new NotImplementedException();
         }
 
         private void SearchByCity(ref IQueryable<SearcResultAppartmentsDto> apps, string? city)

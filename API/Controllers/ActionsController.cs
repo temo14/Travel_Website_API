@@ -1,14 +1,10 @@
-﻿using API.ActionFilters;
-using AutoMapper;
+﻿using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Newtonsoft.Json;
 
 namespace API.Controllers
 {
@@ -68,14 +64,21 @@ namespace API.Controllers
         public IActionResult Search([FromQuery]SearchParameters parameters)
         {
             try
-            {
+            {               
+                var apartments = _repositoryWrapper.Actions.GetAppartments(parameters);
+                var data = new
+                {
+                    apartments.TotalCount,
+                    apartments.PageSize,
+                    apartments.CurrentPage,
+                    apartments.TotalPages,
+                    apartments.HasNext,
+                    apartments.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(data));
 
-                //_loggerManager.LogError("From date cannot be greater then To");
-                //return BadRequest("Ivalid Dates");
-                
-                var apps = _repositoryWrapper.Actions.GetAppartments(parameters);
                 _loggerManager.LogInfo($"Appartments succesfully returned");
-                return Ok(apps);
+                return Ok(apartments);
             }
             catch (Exception ex)
             {
