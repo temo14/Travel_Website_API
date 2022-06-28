@@ -41,18 +41,17 @@ namespace API.Extensions
             if (isValid != null)
             {
                 context.Items["User"] = repository.User.GetProfile(Guid.Parse(isValid));
-
-                var claim = new ClaimsIdentity(new Claim[] { new Claim("Id", isValid) },
-                                    CookieAuthenticationDefaults.AuthenticationScheme);
-
-                context.User = new ClaimsPrincipal(claim);
-                await context.AuthenticateAsync();
             }
             else
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Invalid username or password.");
             }
+            var claim = new ClaimsIdentity(new Claim[] { new Claim("Id", isValid) },
+                     CookieAuthenticationDefaults.AuthenticationScheme);
+
+            context.User = new ClaimsPrincipal(claim);
+            await context.AuthenticateAsync();
 
             await _next(context);
         }

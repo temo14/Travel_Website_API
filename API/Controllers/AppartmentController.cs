@@ -39,7 +39,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong on AddApartment action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
             }
         }
 
@@ -60,7 +60,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong UpdateUser action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
             }
         }
         [HttpGet("ApartmentDetails")]
@@ -77,7 +77,26 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong GetApartmentById action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
+            }
+        }
+        [HttpGet("UserApartment")]
+        public IActionResult GetUserApartment()
+        {
+            try
+            {
+                var user = Request.HttpContext.Items["User"] as User;
+
+                var apartment = _repositoryWrapper.Apartment.GetUserApartment(user.Id);
+
+                _loggerManager.LogInfo($"Appartnent returned");
+
+                return Ok(apartment);
+            }
+            catch (Exception ex)
+            {
+                _loggerManager.LogError($"Something went wrong GetApartmentById action: {ex.Message}");
+                return BadRequest($"{ex.Message}");
             }
         }
     }

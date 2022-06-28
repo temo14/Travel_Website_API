@@ -38,7 +38,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong GetBookings action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
             }
         }
         [HttpGet("MyGuests")]
@@ -55,7 +55,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong GetBookings action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
             }
         }
         [HttpGet("search")]
@@ -65,7 +65,7 @@ namespace API.Controllers
         {
             try
             {               
-                var apartments = _repositoryWrapper.Actions.GetApartments(parameters);
+                var apartments = _repositoryWrapper.Actions.SearchApartments(parameters);
                 var data = new
                 {
                     apartments.TotalCount,
@@ -83,7 +83,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong CreateUser action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
             }
         }
         [HttpPost("AddBookingGuests")]
@@ -104,7 +104,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong on AddBookingGuests action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
             }
         }
         [HttpPut("UpdateStatus")]
@@ -127,7 +127,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong on UpdateBookingGuests action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
             }
         }
 
@@ -159,7 +159,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"User {login.Email} authorized Unsucessfully: {ex.Message}");
-                return Unauthorized();
+                return BadRequest($"{ex.Message}");
             }
         }
     }

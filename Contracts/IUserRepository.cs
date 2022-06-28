@@ -10,7 +10,7 @@ namespace Contracts
 {
     public interface IUserRepository : IRepositoryBase<User>
     {
-        User GetProfile(Guid userId);
+        ReturnProfileDto GetProfile(Guid userId);
         void CreateUser(User user);
         void UpdateUser(User user, UserUpdateDto update);
         User Login(LoginModel user);

@@ -43,13 +43,13 @@ namespace Altex_Task.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong CreateUser action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
             }
         }
 
-        [HttpGet("{id}/getUser")]
+        [HttpGet("getProfile")]
 
-        public IActionResult GetProfile(Guid id = default)
+        public IActionResult GetProfile()
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Altex_Task.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong GetUserById action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error"); 
+                return BadRequest($"{ex.Message}");
             }
         }
 
@@ -80,7 +80,7 @@ namespace Altex_Task.Controllers
             catch (Exception ex)
             {
                 _loggerManager.LogError($"Something went wrong UpdateUser action: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return BadRequest($"{ex.Message}");
             }
         }
     }

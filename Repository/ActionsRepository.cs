@@ -26,9 +26,14 @@ namespace Repository
             throw new Exception("Invalid date");
         }
 
-        public PagedList<SearcResultApartmentsDto> GetApartments(SearchParameters search)
+        public PagedList<SearcResultApartmentsDto> SearchApartments(SearchParameters search)
         {
-            var result = from app in _context.Apartments
+            var apartments = _context.Apartments.AsQueryable();
+            if (search.From != null)
+            {
+
+            }
+            var result = from app in apartments
                          from date in _context.BookingGuests
                          where date.HostId == app.OwnerId
                          orderby date.From < search.From && date.To > search.From

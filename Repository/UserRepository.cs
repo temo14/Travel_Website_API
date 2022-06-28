@@ -20,19 +20,22 @@ namespace Repository
             if (check != null) throw new Exception("Email already exists");
             Create(user);
         }
-           
 
-        public User GetProfile(Guid userId)
+        public ReturnProfileDto GetProfile(Guid userId)
         {
-            var apartment = Context.Apartments.FirstOrDefault(i => i.OwnerId == userId);
-
             var user = Context.Users.Where(user => user.Id.Equals(userId)).FirstOrDefault() ??
                 throw new NullReferenceException("User doesnot exists");
-
-            user.Apartment = apartment;
-
-            return user;
-               
+            
+            return new ReturnProfileDto()
+            {
+                Description = user.Description,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Id = userId,
+                Image = user.Image,
+                Password = user.Password
+            };
         }
 
         public User Login(LoginModel user)

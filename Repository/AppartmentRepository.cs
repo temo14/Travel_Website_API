@@ -42,6 +42,11 @@ namespace Repository
             return new ApartmentDetails() { Apartment = apartment, Avalibilities = avaliabilty };
         }
 
+        public Apartments? GetUserApartment(Guid userId)
+        {
+            return Context.Apartments.FirstOrDefault(i => i.OwnerId == userId);
+        }
+
         public void UpdateApartment(Apartments apartments) => Update(apartments);
     }
 }
