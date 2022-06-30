@@ -9,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 builder.Services.ConfigureCors();
-builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureMySqlContext<RepositoryContext>(builder.Configuration.GetConnectionString("AltexAppCon"));
 builder.Services.ConfigureRepositoryWrapper();
@@ -17,7 +16,6 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.ConfigureJWT();
 //builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddOptions();
 builder.Services.AddAuthentication().AddCookie();
 
 //builder.Services.AddAuthentication("BasicAuthentication")

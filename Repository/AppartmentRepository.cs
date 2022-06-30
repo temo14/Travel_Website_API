@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.DataTransferObjects;
 using Entities.Helper;
 using Entities.Models;
 using System;
@@ -47,6 +48,10 @@ namespace Repository
             return Context.Apartments.FirstOrDefault(i => i.OwnerId == userId);
         }
 
-        public void UpdateApartment(Apartments apartments) => Update(apartments);
+        public void UpdateApartment(Apartments apartment)
+        {
+            Update(apartment);
+        }
+            
     }
 }

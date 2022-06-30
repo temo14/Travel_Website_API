@@ -12,7 +12,7 @@ namespace Contracts
     {
         ReturnProfileDto GetProfile(Guid userId);
         void CreateUser(User user);
-        void UpdateUser(User user, UserUpdateDto update);
+        void UpdateUser(User user);
         User Login(LoginModel user);
     }
 }

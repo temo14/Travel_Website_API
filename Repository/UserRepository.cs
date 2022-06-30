@@ -2,6 +2,7 @@
 using Entities;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,27 +50,39 @@ namespace Repository
         }
         
 
-        public void UpdateUser(User user,  UserUpdateDto update)
+        public void UpdateUser(User user)
         {
-            if (!string.IsNullOrEmpty(update.FirstName))
-            {
-                user.FirstName = update.FirstName;
-            }
-            if (!string.IsNullOrEmpty(update.Image))
-            {
-                user.Image = update.Image;
-            }
-            if (!string.IsNullOrEmpty(update.LastName))
-            {
-                user.LastName = update.LastName;
-            }
-            if (!string.IsNullOrEmpty(update.Email))
-            {
-                user.Email = update.Email;
-            }
-            user.Description = update.Description;
+            Context.Entry(Context.Users.FirstOrDefault(i=>i.Id ==user.Id)).State = EntityState.Detached;
 
-            Context.Users.Update(user);
+            var r = Context.Users.FirstOrDefault(i => i.Id == user.Id);
+            
+
+            Update(user);
+
+            //Context.Users.Attach(user);
+
+            //Context.Entry(user).State =EntityState.Modified;
+
+
+            //if (!string.IsNullOrEmpty(update.FirstName))
+            //{
+            //    user.FirstName = update.FirstName;
+            //}
+            //if (!string.IsNullOrEmpty(update.Image))
+            //{
+            //    user.Image = update.Image;
+            //}
+            //if (!string.IsNullOrEmpty(update.LastName))
+            //{
+            //    user.LastName = update.LastName;
+            //}
+            //if (!string.IsNullOrEmpty(update.Email))
+            //{
+            //    user.Email = update.Email;
+            //}
+            //user.Description = update.Description;
+
+
         }
     }
 }

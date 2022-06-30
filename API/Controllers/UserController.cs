@@ -62,17 +62,21 @@ namespace Altex_Task.Controllers
             }
         }
 
-        [HttpPut("{id}/updateUser")]
+        [HttpPut("/updateUser")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
 
         public IActionResult UpdateUser([FromBody]UserUpdateDto update)
         {
+
             try
             {
-                var userEntity = Request.HttpContext.Items["User"] as User
-                    ??throw new NullReferenceException();
+                var userEntity = Request.HttpContext.Items["User"] as ReturnProfileDto
+                    ?? throw new NullReferenceException();
 
-                _repositoryWrapper.User.UpdateUser(userEntity,update);
+                var user = _mapper.Map<User>(update);
+                user.Id = userEntity.Id;
+
+                _repositoryWrapper.User.UpdateUser(user);
                 _repositoryWrapper.Save();
 
                 return StatusCode(204);

@@ -66,6 +66,7 @@ namespace API.Controllers
             try
             {               
                 var apartments = _repositoryWrapper.Actions.SearchApartments(parameters);
+
                 var data = new
                 {
                     apartments.TotalCount,
@@ -161,6 +162,13 @@ namespace API.Controllers
                 _loggerManager.LogError($"User {login.Email} authorized Unsucessfully: {ex.Message}");
                 return BadRequest($"{ex.Message}");
             }
+        }
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("token");
+
+            return Ok();
         }
     }
 }

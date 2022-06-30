@@ -29,6 +29,9 @@ namespace API.Controllers
             try
             {
                 var app = _mapper.Map<Apartments>(apartment);
+                var user = (ReturnProfileDto)Request.HttpContext.Items["User"];
+
+                app.OwnerId = user.Id ;
                 _repositoryWrapper.Apartment.AddApartment(app);
                 _repositoryWrapper.Save();
 
@@ -48,9 +51,18 @@ namespace API.Controllers
         {
             try
             {
+                var userId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
 
-                var app = _mapper.Map<Apartments>(apartment);
-                _repositoryWrapper.Apartment.Update(app);
+                var userAp = _repositoryWrapper.Apartment.GetUserApartment(userId);
+                if (apartment.Image == null)
+                {
+                    apartment.Image = userAp.Image;
+                }
+                userAp = _mapper.Map<Apartments>(apartment);
+                //update.OwnerId = userId;
+                //update.Id = userAp.Id;
+
+                _repositoryWrapper.Apartment.UpdateApartment(userAp);
                 _repositoryWrapper.Save();
 
                 _loggerManager.LogInfo($"Appartnent Updated");

@@ -21,24 +21,25 @@ namespace Repository
             var item = _context.BookingGuests.FirstOrDefault(i => i.HostId == service.HostId && i.status==(Status)1
                                                                 && i.From < service.From && i.To > service.From);
             if (item == null)
-            _context.BookingGuests.Add(service);
-
-            throw new Exception("Invalid date");
+                _context.BookingGuests.Add(service);
+            else
+                throw new Exception("Apartment already Booked");
         }
 
         public PagedList<SearcResultApartmentsDto> SearchApartments(SearchParameters search)
         {
             var apartments = _context.Apartments.AsQueryable();
-            if (search.From != null)
-            {
 
-            }
-            var result = from app in apartments
+            SearchByCity(ref apartments, search.City);
+
+            bool checkDateRange = search.From != null && search.To != null;
+
+            var result = from app in apartments.AsEnumerable()
                          from date in _context.BookingGuests
                          where date.HostId == app.OwnerId
-                         orderby date.From < search.From && date.To > search.From
                          select new SearcResultApartmentsDto
                          {
+
                              Address = app.Address,
                              City = app.City,
                              Description = app.Description,
@@ -46,12 +47,24 @@ namespace Repository
                              NumOfBeds = app.NumOfBeds,
                              OwnerId = app.OwnerId,
                              Image = app.Image,
-                             Avaliable = date.From < search.From && date.To > search.From
+                             Avaliable = checkDateRange ?
+                                         !(date.From < search.From && date.To > search.From)
+                                         && !(date.From < search.To && date.To > search.To)
+                                         && !(date.From > search.From && date.To < search.To) : null
                          };
 
-            SearchByCity(ref result, search.City);
+            if (checkDateRange && result != null)
+            {
+                result = result.OrderBy(x => x.Avaliable);
 
+                result = result.DistinctBy(i => i.OwnerId);
+            }
 
+            // Sort
+            Sort(ref result, search.OrderBy);
+
+            // Filter with beds.
+            result = result.AsQueryable().Where(i => i.NumOfBeds == search.Bedsfilter);
 
             return PagedList<SearcResultApartmentsDto>.ToPagedList(result,
                 search.PageNumber, search.PageSize);
@@ -111,15 +124,33 @@ namespace Repository
 
         }
 
-        private void SearchByCity(ref IQueryable<SearcResultApartmentsDto> apps, string? city)
+        private void SearchByCity(ref IQueryable<Apartments> apartments, string? city)
         {
-            if (!apps.Any() || string.IsNullOrEmpty(city))
+            if (!apartments.Any() || string.IsNullOrEmpty(city))
             {
-                apps = apps.Where(x => x.City.StartsWith(city) || city == null);
+                apartments = apartments.Where(x => x.City.StartsWith(city) || city == null);
             }
 
-            apps = apps.Where(a => a.City.ToLower().Contains(city.Trim().ToLower())) ;
+            apartments = apartments.Where(a => a.City.ToLower().Contains(city.Trim().ToLower()));
         }
-
+        private void Sort(ref IEnumerable<SearcResultApartmentsDto> apartments, string? sortBy)
+        {
+            switch (sortBy)
+            {
+                case "NumOfBeds desc":
+                    apartments = apartments.OrderByDescending(x => x.NumOfBeds);
+                    break;
+                case "DistanceFromCenter desc":
+                    apartments.OrderByDescending(x => x.DistanceFromCenter);
+                    break;
+                case "DistanceFromCenter":
+                    apartments= apartments.OrderBy(x => x.DistanceFromCenter);
+                    break;
+                case "NumOfBeds":
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
