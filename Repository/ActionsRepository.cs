@@ -18,8 +18,8 @@ namespace Repository
 
         public void AddBook_Guest(BookingGuests service)
         {
-            var item = _context.BookingGuests.FirstOrDefault(i => i.HostId == service.HostId && i.status==(Status)1
-                                                                && i.From < service.From && i.To > service.From);
+            var item = _context.BookingGuests.FirstOrDefault(i => i.HostId == service.HostId && i.status == Status.Accepted
+                                                                && !(i.From <= service.To && service.From <= i.To));
             if (item == null)
                 _context.BookingGuests.Add(service);
             else
@@ -28,49 +28,58 @@ namespace Repository
 
         public PagedList<SearcResultApartmentsDto> SearchApartments(SearchParameters search)
         {
-            var apartments = _context.Apartments.AsQueryable();
+            var result = from app in _context.Apartments
+                     select new SearcResultApartmentsDto
+                     {
+                         Id = app.Id,
+                         Address = app.Address,
+                         City = app.City,
+                         Description = app.Description,
+                         DistanceFromCenter = app.DistanceFromCenter,
+                         NumOfBeds = app.NumOfBeds,
+                         OwnerId = app.OwnerId,
+                         Image = app.Image,
+                         Avaliable = null
+                     };
 
-            SearchByCity(ref apartments, search.City);
-
-            bool checkDateRange = search.From != null && search.To != null;
-
-            var result = from app in apartments.AsEnumerable()
-                         from date in _context.BookingGuests
-                         where date.HostId == app.OwnerId
-                         select new SearcResultApartmentsDto
-                         {
-
-                             Address = app.Address,
-                             City = app.City,
-                             Description = app.Description,
-                             DistanceFromCenter = app.DistanceFromCenter,
-                             NumOfBeds = app.NumOfBeds,
-                             OwnerId = app.OwnerId,
-                             Image = app.Image,
-                             Avaliable = checkDateRange ?
-                                         !(date.From < search.From && date.To > search.From)
-                                         && !(date.From < search.To && date.To > search.To)
-                                         && !(date.From > search.From && date.To < search.To) : null
-                         };
-
-            if (checkDateRange && result != null)
-            {
-                result = result.OrderBy(x => x.Avaliable);
-
-                result = result.DistinctBy(i => i.OwnerId);
-            }
+            SearchByCity(ref result, search.City);
 
             // Sort
             Sort(ref result, search.OrderBy);
 
             // Filter with beds.
-            result = result.AsQueryable().Where(i => i.NumOfBeds == search.Bedsfilter);
+            if (search.Bedsfilter > 0)
+            {
+                result = result.Where(i => i.NumOfBeds == search.Bedsfilter);
+            }
+
+            bool checkDateRange = search.From != null && search.To != null;
+            /*date.HostId == app.OwnerId && date.status == Status.Accepted*/
+
+            if (checkDateRange)
+            {
+                foreach (var item in result)
+                {
+                    var bookedCase = _context.BookingGuests.Where(x => x.HostId == item.OwnerId
+                        && x.status == Status.Accepted
+                        && !(x.From <= search.To && search.From <= x.To));
+
+                    if (bookedCase != null)
+                    {
+                        item.Avaliable = false;
+                    }
+                }
+                result = result.OrderBy(x => x.Avaliable);
+
+            }
+
+
 
             return PagedList<SearcResultApartmentsDto>.ToPagedList(result,
                 search.PageNumber, search.PageSize);
         }
 
-        public IEnumerable<ReturnBookingsDto>? GetBookings(Guid Id)
+        public IEnumerable<ReturnBookingsDto>? GetBookings(Guid? Id)
         {
             var bookings = _context.BookingGuests.Where(o => o.GuestId == Id);
             if (bookings != null)
@@ -90,7 +99,7 @@ namespace Repository
             return null;
         }
 
-        public IEnumerable<ReturnGuestsDto>? GetGuests(Guid Id)
+        public IEnumerable<ReturnGuestsDto>? GetGuests(Guid? Id)
         {
             var guests = _context.BookingGuests.Where(o => o.HostId == Id).ToList();
             if (guests != null)
@@ -103,7 +112,11 @@ namespace Repository
                            Id = g.Id,
                            From = g.From,
                            To = g.To,
-                           guest = u
+                           Description=u.Description,
+                           Email = u.Email,
+                           FirstName = u.FirstName,
+                           LastName = u.LastName,
+                           Image = u.Image
                        };
             }
             return null;
@@ -115,16 +128,11 @@ namespace Repository
 
             if (request == null) throw new NullReferenceException($"Id - {id} doesnot exists");
 
-            if(status.Equals((Status)2))
-            {
-                _context.BookingGuests.Remove(request);
-                return;
-            }
             request.status = (Status)Enum.Parse(typeof(Status), status);
 
         }
 
-        private void SearchByCity(ref IQueryable<Apartments> apartments, string? city)
+        private void SearchByCity(ref IQueryable<SearcResultApartmentsDto> apartments, string? city)
         {
             if (!apartments.Any() || string.IsNullOrEmpty(city))
             {
@@ -133,7 +141,7 @@ namespace Repository
 
             apartments = apartments.Where(a => a.City.ToLower().Contains(city.Trim().ToLower()));
         }
-        private void Sort(ref IEnumerable<SearcResultApartmentsDto> apartments, string? sortBy)
+        private void Sort(ref IQueryable<SearcResultApartmentsDto> apartments, string? sortBy)
         {
             switch (sortBy)
             {

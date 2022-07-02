@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Entities.Migrations
 {
-    public partial class MyFirstMigration15 : Migration
+    public partial class Credentials : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,10 +17,14 @@ namespace Entities.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NumOfBeds = table.Column<int>(type: "int", nullable: false),
-                    PhotoLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DistanceFromCenter = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DistanceFromCenter = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Pool = table.Column<bool>(type: "bit", nullable: false),
+                    Gym = table.Column<bool>(type: "bit", nullable: false),
+                    Wifi = table.Column<bool>(type: "bit", nullable: false),
+                    Parking = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,23 +56,24 @@ namespace Entities.Migrations
                     LastName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApartmentsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ApartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Users_Apartments_ApartmentsId",
-                        column: x => x.ApartmentsId,
+                        name: "FK_Users_Apartments_ApartmentId",
+                        column: x => x.ApartmentId,
                         principalTable: "Apartments",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_ApartmentsId",
+                name: "IX_Users_ApartmentId",
                 table: "Users",
-                column: "ApartmentsId");
+                column: "ApartmentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

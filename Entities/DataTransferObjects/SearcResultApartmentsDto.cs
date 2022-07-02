@@ -15,7 +15,7 @@ namespace Entities.DataTransferObjects
         public string? Image { get; set; }
         public int? DistanceFromCenter { get; set; }
         public string? Description { get; set; }
-        public Guid OwnerId { get; set; }
+        public Guid? OwnerId { get; set; }
         public bool? Avaliable { get; set; }
 
     }

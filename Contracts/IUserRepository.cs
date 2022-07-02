@@ -1,10 +1,5 @@
 ﻿using Entities.DataTransferObjects;
 using Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Contracts
 {
@@ -12,7 +7,7 @@ namespace Contracts
     {
         ReturnProfileDto GetProfile(Guid userId);
         void CreateUser(User user);
-        void UpdateUser(User user);
+        void UpdateUser(ReturnProfileDto update);
         User Login(LoginModel user);
     }
 }

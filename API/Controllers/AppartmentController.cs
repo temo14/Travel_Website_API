@@ -24,14 +24,14 @@ namespace API.Controllers
         }
         [HttpPost]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
-        public IActionResult AddApartment([FromBody]ApartmentCreationDto apartment)
+        public IActionResult AddApartment([FromBody]ApartmentBase apartment)
         {
             try
             {
                 var app = _mapper.Map<Apartments>(apartment);
                 var user = (ReturnProfileDto)Request.HttpContext.Items["User"];
 
-                app.OwnerId = user.Id ;
+                app.OwnerId = user.Id;
                 _repositoryWrapper.Apartment.AddApartment(app);
                 _repositoryWrapper.Save();
 
@@ -47,27 +47,18 @@ namespace API.Controllers
         }
 
         [HttpPut("updateApartment")]
-        public IActionResult UpdateApartment([FromBody]ApartmentCreationDto apartment)
+        public IActionResult UpdateApartment([FromBody]ApartmentBase update)
         {
             try
             {
                 var userId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
 
-                var userAp = _repositoryWrapper.Apartment.GetUserApartment(userId);
-                if (apartment.Image == null)
-                {
-                    apartment.Image = userAp.Image;
-                }
-                userAp = _mapper.Map<Apartments>(apartment);
-                //update.OwnerId = userId;
-                //update.Id = userAp.Id;
-
-                _repositoryWrapper.Apartment.UpdateApartment(userAp);
+                _repositoryWrapper.Apartment.UpdateApartment(userId, update);
                 _repositoryWrapper.Save();
 
                 _loggerManager.LogInfo($"Appartnent Updated");
 
-                return StatusCode(204);
+                return StatusCode(200);
             }
             catch (Exception ex)
             {

@@ -9,7 +9,7 @@ namespace Contracts
         PagedList<SearcResultApartmentsDto> SearchApartments(SearchParameters search);
         void AddBook_Guest(BookingGuests service);
         void Updatebookings_guests(Guid id, string status);
-        IEnumerable<ReturnGuestsDto>? GetGuests(Guid Id);
-        IEnumerable<ReturnBookingsDto>? GetBookings(Guid Id);
+        IEnumerable<ReturnGuestsDto>? GetGuests(Guid? Id);
+        IEnumerable<ReturnBookingsDto>? GetBookings(Guid? Id);
     }
 }

@@ -48,10 +48,29 @@ namespace Repository
             return Context.Apartments.FirstOrDefault(i => i.OwnerId == userId);
         }
 
-        public void UpdateApartment(Apartments apartment)
+        public void UpdateApartment(Guid? ownerId, ApartmentBase update)
         {
-            Update(apartment);
+            var apartment = Context.Apartments.FirstOrDefault(i => i.OwnerId == ownerId);
+            if (apartment != null)
+            {
+                apartment.Address = update.Address == null || update.Address == default ? apartment.Address : update.Address;
+
+                apartment.DistanceFromCenter = update.DistanceFromCenter == default ? apartment.DistanceFromCenter : update.DistanceFromCenter;
+
+                apartment.NumOfBeds = update.NumOfBeds == default ? apartment.NumOfBeds : update.NumOfBeds;
+
+                apartment.City = update.City == null ? apartment.City : update.City;
+
+                apartment.Description = update.Description == null ? apartment.Description : update.Description;
+
+                apartment.Image = update.Image == null ? apartment.Image : update.Image;
+
+
+                apartment.Gym = update.Gym is not null ? apartment.Gym : update.Gym;
+                apartment.Parking = update.Parking is not null ? apartment.Parking : update.Parking;
+                apartment.Pool = update.Pool is not null ? apartment.Pool : update.Pool;
+                apartment.Wifi = update.Wifi is not null ? apartment.Wifi : update.Wifi;
+            }
         }
-            
     }
 }

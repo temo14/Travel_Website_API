@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entities.Models
 {
-    public class AvaliabilityInfo
+    public class AvaliabilityInfo : DateTimes
     {
         public User? Guest { get; set; }
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public string? Description { get; set; }
     }
 }

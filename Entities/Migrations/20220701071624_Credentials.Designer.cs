@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20220624184836_MyFirstMigration15")]
-    partial class MyFirstMigration15
+    [Migration("20220701071624_Credentials")]
+    partial class Credentials
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,7 +39,13 @@ namespace Entities.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DistanceFromCenter")
+                    b.Property<int>("DistanceFromCenter")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Gym")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumOfBeds")
@@ -48,8 +54,14 @@ namespace Entities.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("PhotoLocation")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Parking")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Pool")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Wifi")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -89,7 +101,7 @@ namespace Entities.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("UserId");
 
-                    b.Property<Guid?>("ApartmentsId")
+                    b.Property<Guid?>("ApartmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -105,6 +117,9 @@ namespace Entities.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(60)
@@ -117,18 +132,18 @@ namespace Entities.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApartmentsId");
+                    b.HasIndex("ApartmentId");
 
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Entities.Models.User", b =>
                 {
-                    b.HasOne("Entities.Models.Apartments", "Apartments")
+                    b.HasOne("Entities.Models.Apartments", "Apartment")
                         .WithMany()
-                        .HasForeignKey("ApartmentsId");
+                        .HasForeignKey("ApartmentId");
 
-                    b.Navigation("Apartments");
+                    b.Navigation("Apartment");
                 });
 #pragma warning restore 612, 618
         }

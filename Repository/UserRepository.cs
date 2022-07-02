@@ -34,8 +34,7 @@ namespace Repository
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Id = userId,
-                Image = user.Image,
-                Password = user.Password
+                Image = user.Image
             };
         }
 
@@ -44,45 +43,26 @@ namespace Repository
             var acc = Context.Users.FirstOrDefault(u => u.Email.ToLower() == user.Email.ToLower()
                                                        && u.Password.ToLower() == user.Password.ToLower());
 
-            if (acc != null || acc.Password == user.Password) return acc;
+            if (acc != null) return acc;
 
             throw new NullReferenceException();
         }
         
-
-        public void UpdateUser(User user)
+        public void UpdateUser(ReturnProfileDto update)
         {
-            Context.Entry(Context.Users.FirstOrDefault(i=>i.Id ==user.Id)).State = EntityState.Detached;
+            var user = Context.Users.FirstOrDefault(i => i.Id == update.Id);
+            if (user != null)
+            {
+                user.Email = update.Email == null ? user.Email : update.Email;
 
-            var r = Context.Users.FirstOrDefault(i => i.Id == user.Id);
-            
+                user.FirstName = update.FirstName == null ? user.FirstName : update.FirstName;
 
-            Update(user);
+                user.LastName = update.LastName == null ? user.LastName : update.LastName;
 
-            //Context.Users.Attach(user);
+                user.Image = update.Image == null ? user.Image : update.Image;
 
-            //Context.Entry(user).State =EntityState.Modified;
-
-
-            //if (!string.IsNullOrEmpty(update.FirstName))
-            //{
-            //    user.FirstName = update.FirstName;
-            //}
-            //if (!string.IsNullOrEmpty(update.Image))
-            //{
-            //    user.Image = update.Image;
-            //}
-            //if (!string.IsNullOrEmpty(update.LastName))
-            //{
-            //    user.LastName = update.LastName;
-            //}
-            //if (!string.IsNullOrEmpty(update.Email))
-            //{
-            //    user.Email = update.Email;
-            //}
-            //user.Description = update.Description;
-
-
+                user.Description = update.Description == null ? user.Description : update.Description;
+            }
         }
     }
 }

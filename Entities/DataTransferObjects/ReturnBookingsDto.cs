@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace Entities.DataTransferObjects
 {
-    public class ReturnBookingsDto
+    public class ReturnBookingsDto : DateTimes
     {
         public Apartments? Apartment { get; set; }
-        public DateTime? From { get; set; }
-        public DateTime? To { get; set; }
         public Status Status { get; set; }
         public string? Image { get; set; }
        

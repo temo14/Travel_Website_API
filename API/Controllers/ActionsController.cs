@@ -25,12 +25,13 @@ namespace API.Controllers
             _mapper = mapper;
         }
         [HttpGet("MyBookings")]
-        public IActionResult GetBookings([FromQuery]Guid id)
+        public IActionResult GetBookings()
         {
             try
             {
-                var bookings = _repositoryWrapper.Actions.GetBookings(id);
-                if (bookings == null) return NotFound();
+                var guestId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
+
+                var bookings = _repositoryWrapper.Actions.GetBookings(guestId);
 
                 _loggerManager.LogInfo($"Bookings has returned");
                 return Ok(bookings);
@@ -42,12 +43,14 @@ namespace API.Controllers
             }
         }
         [HttpGet("MyGuests")]
-        public IActionResult GetGuests([FromQuery] Guid id)
+        public IActionResult GetGuests()
         {
             try
             {
-                var bookings = _repositoryWrapper.Actions.GetGuests(id);
-                if (bookings == null) return NotFound();
+
+                var hostId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
+
+                var bookings = _repositoryWrapper.Actions.GetGuests(hostId);
 
                 _loggerManager.LogInfo($"Bookings has returned");
                 return Ok(bookings);
@@ -89,11 +92,12 @@ namespace API.Controllers
         }
         [HttpPost("AddBookingGuests")]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
-        public IActionResult AddBookingGuests([FromBody] BookingGuestAddDto service)
+        public IActionResult AddBookingGuests([FromBody]BookingGuestAddDto service)
         {
             try
             {
                 var item = _mapper.Map<BookingGuests>(service);
+                item.GuestId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
 
                 _repositoryWrapper.Actions.AddBook_Guest(item);
                 _repositoryWrapper.Save();
@@ -119,7 +123,7 @@ namespace API.Controllers
                     _repositoryWrapper.Save();
                     _loggerManager.LogInfo($"Status {id} updated");
 
-                    return StatusCode(204);
+                    return StatusCode(200);
                 }
                 _loggerManager.LogWarn($"Invalid {id} status update Parametres");
                 return StatusCode(404);
@@ -166,8 +170,12 @@ namespace API.Controllers
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("token");
-
+            Response.Cookies.Delete("Token", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None
+            });
             return Ok();
         }
     }

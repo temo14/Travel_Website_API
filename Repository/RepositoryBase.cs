@@ -17,10 +17,5 @@ namespace Repository
         {
             Context.Set<T>().Add(entity);
         }
-
-        public virtual void Update(T entity)
-        {
-            Context?.Set<T>().Update(entity);
-        }
     }
 }

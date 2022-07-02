@@ -9,9 +9,9 @@ namespace API
         public MappingProfile()
         {
             CreateMap<UserCreationDto, User>();
-            CreateMap<UserUpdateDto, User>();
+            CreateMap<UserBase, User>();
             CreateMap<ReturnProfileDto,User>();
-            CreateMap<ApartmentCreationDto,Apartments>();
+            CreateMap<ApartmentBase,Apartments>();
             CreateMap<BookingGuestAddDto,BookingGuests>();
         }
         

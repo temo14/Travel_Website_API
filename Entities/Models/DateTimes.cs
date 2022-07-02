@@ -1,15 +1,13 @@
-﻿using Entities.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.DataTransferObjects
+namespace Entities.Models
 {
-    public class ReturnGuestsDto : ReturnProfileDto
+    public class DateTimes
     {
-        public Guid Id { get; set; }
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
     }

@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace Entities.Helper
 {
-    public struct Amenities
+    public class Amenities
     {
-        public Amenities()
-        {
-        }
         
-        public bool Pool { get; set; } = false;
-        public bool Gym { get; set; } = false;
-        public bool Wifi { get; set; } = false;
-        public bool Parking { get; set; } = false;
+        public bool? Pool { get; set; } = false;
+        public bool? Gym { get; set; } = false;
+        public bool? Wifi { get; set; } = false;
+        public bool? Parking { get; set; } = false;
     }
 }
