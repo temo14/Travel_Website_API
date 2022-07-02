@@ -3,11 +3,6 @@ using Entities;
 using Entities.DataTransferObjects;
 using Entities.Helper;
 using Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -26,7 +21,7 @@ namespace Repository
             Create(apartment);
         }
 
-        public ApartmentDetails GetApartmentDetails(Guid apartmentId)
+        public ApartmentDetails GetApartmentDetails(Guid? apartmentId)
         {
             var apartment = Context.Apartments.FirstOrDefault(x => x.Id == apartmentId);
             if (apartment == null) throw new ArgumentNullException("Apartment doesnot exists");
@@ -43,8 +38,9 @@ namespace Repository
             return new ApartmentDetails() { Apartment = apartment, Avalibilities = avaliabilty };
         }
 
-        public Apartments? GetUserApartment(Guid userId)
+        public Apartments? GetUserApartment(Guid? userId)
         {
+            if (userId == null) throw new ArgumentNullException("userId");
             return Context.Apartments.FirstOrDefault(i => i.OwnerId == userId);
         }
 

@@ -12,7 +12,7 @@ namespace Entities.Models
 {
     public class Apartments : ApartmentBase
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         [ForeignKey(nameof(OwnerId))]
         public Guid? OwnerId { get; set; }

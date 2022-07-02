@@ -22,7 +22,7 @@ namespace API.Controllers
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
         }
-        [HttpPost]
+        [HttpPost("")]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult AddApartment([FromBody]ApartmentBase apartment)
         {
@@ -37,7 +37,7 @@ namespace API.Controllers
 
                 _loggerManager.LogInfo($"Appartnent Added");
 
-                return StatusCode(201);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace API.Controllers
         {
             try
             {
-                var user = Request.HttpContext.Items["User"] as User;
+                var user = Request.HttpContext.Items["User"] as ReturnProfileDto;
 
                 var apartment = _repositoryWrapper.Apartment.GetUserApartment(user.Id);
 

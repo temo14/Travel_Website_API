@@ -11,7 +11,7 @@ namespace Entities.DataTransferObjects
     public class ReturnBookingsDto : DateTimes
     {
         public Apartments? Apartment { get; set; }
-        public Status Status { get; set; }
+        public string? Status { get; set; }
         public string? Image { get; set; }
        
     }

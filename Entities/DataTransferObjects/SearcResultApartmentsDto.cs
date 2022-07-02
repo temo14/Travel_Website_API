@@ -8,7 +8,7 @@ namespace Entities.DataTransferObjects
 {
     public class SearcResultApartmentsDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string? City { get; set; }
         public string? Address { get; set; }
         public int NumOfBeds { get; set; }

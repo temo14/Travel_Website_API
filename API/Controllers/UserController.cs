@@ -38,7 +38,7 @@ namespace Altex_Task.Controllers
 
                 _loggerManager.LogInfo($"User Created");
 
-                return StatusCode(201);
+                return StatusCode(200);
             }
             catch (Exception ex)
             {
@@ -77,7 +77,7 @@ namespace Altex_Task.Controllers
                 _repositoryWrapper.User.UpdateUser(update);
                 _repositoryWrapper.Save();
 
-                return StatusCode(204);
+                return StatusCode(200);
             }
             catch (Exception ex)
             {

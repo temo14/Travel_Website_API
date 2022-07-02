@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.Helper;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,9 @@ namespace Entities.DataTransferObjects
 {
     public class ReturnGuestsDto : ReturnProfileDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
+        public string?  Status { get; set; }
     }
 }

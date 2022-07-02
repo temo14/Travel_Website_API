@@ -2,7 +2,6 @@
 using Entities;
 using Entities.DataTransferObjects;
 using Entities.Models;
-using System;
 using Entities.Helper;
 
 namespace Repository
@@ -44,9 +43,6 @@ namespace Repository
 
             SearchByCity(ref result, search.City);
 
-            // Sort
-            Sort(ref result, search.OrderBy);
-
             // Filter with beds.
             if (search.Bedsfilter > 0)
             {
@@ -56,24 +52,26 @@ namespace Repository
             bool checkDateRange = search.From != null && search.To != null;
             /*date.HostId == app.OwnerId && date.status == Status.Accepted*/
 
+            List<SearcResultApartmentsDto> list = new();
+
             if (checkDateRange)
             {
                 foreach (var item in result)
                 {
-                    var bookedCase = _context.BookingGuests.Where(x => x.HostId == item.OwnerId
+                    var bookedCase = _context.BookingGuests.FirstOrDefault(x => x.HostId == item.OwnerId
                         && x.status == Status.Accepted
-                        && !(x.From <= search.To && search.From <= x.To));
+                        && x.From <= search.To && search.From <= x.To);
 
-                    if (bookedCase != null)
-                    {
-                        item.Avaliable = false;
-                    }
+                    item.Avaliable = bookedCase == null;
+
+                    list.Add(item);
                 }
                 result = result.OrderBy(x => x.Avaliable);
-
+                result = list.AsQueryable();
             }
 
-
+            // Sort
+            Sort(ref result, search.OrderBy);
 
             return PagedList<SearcResultApartmentsDto>.ToPagedList(result,
                 search.PageNumber, search.PageSize);
@@ -93,7 +91,7 @@ namespace Repository
                            From = b.From,
                            Image = a.Image,
                            To = b.To,
-                           Status = b.status
+                           Status = b.status.ToString()
                        };
             }
             return null;
@@ -112,11 +110,12 @@ namespace Repository
                            Id = g.Id,
                            From = g.From,
                            To = g.To,
-                           Description=u.Description,
+                           Description = u.Description,
                            Email = u.Email,
                            FirstName = u.FirstName,
                            LastName = u.LastName,
-                           Image = u.Image
+                           Image = u.Image,
+                           Status = g.status.ToString()
                        };
             }
             return null;

@@ -10,9 +10,9 @@ namespace Contracts
 {
     public interface IApartmentRepository : IRepositoryBase<Apartments>
     {
-        Apartments? GetUserApartment(Guid userId);
+        Apartments? GetUserApartment(Guid? userId);
         void AddApartment(Apartments apartment);
         void UpdateApartment(Guid? ownerId, ApartmentBase update);
-        ApartmentDetails GetApartmentDetails(Guid apartmentId);
+        ApartmentDetails GetApartmentDetails(Guid? apartmentId);
     }
 }
