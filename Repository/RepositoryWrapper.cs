@@ -11,10 +11,10 @@ namespace Repository
     public class RepositoryWrapper : IRepositoryWrapper
     {
         private RepositoryContext _context;
-        private IApartmentRepository _apartmentRepository;
-        private IUserRepository _userRepository;
-        private IActions _actions;
-        private IJwtUtils _jwt;
+        private IApartmentRepository? _apartmentRepository;
+        private IUserRepository? _userRepository;
+        private IActions? _actions;
+        private IJwtUtils? _jwt;
         public RepositoryWrapper(RepositoryContext context)
         {
             _context = context;

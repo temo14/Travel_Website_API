@@ -41,11 +41,12 @@ namespace Repository
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
-                var userId = (validatedToken as JwtSecurityToken).Payload.First(pay => pay.Key == "id")
+                var jwtToken = validatedToken as JwtSecurityToken ?? throw new NullReferenceException();
+
+                var userId = jwtToken.Payload.First(pay => pay.Key == "id")
                                                                     .Value.ToString();
                 if (userId == null) throw new Exception("invalid authorization");
                 return userId;

@@ -10,8 +10,6 @@ namespace Entities.DataTransferObjects
 {
     public class UserCreationDto: UserBase, IEntity
     {
-
-
         [Required(ErrorMessage = "Password is required")]
         [StringLength(60, ErrorMessage = "Password can't be longer than 60 characters")]
         [DataType(DataType.Password)]

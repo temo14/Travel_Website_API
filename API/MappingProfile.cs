@@ -14,6 +14,5 @@ namespace API
             CreateMap<ApartmentBase,Apartments>();
             CreateMap<BookingGuestAddDto,BookingGuests>();
         }
-        
     }
 }

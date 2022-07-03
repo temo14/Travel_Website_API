@@ -30,9 +30,9 @@ namespace API.Controllers
         {
             try
             {
-                var guestId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
+                var guest = Request.HttpContext.Items["User"] as ReturnProfileDto ?? throw new Exception("Unauthorized");
 
-                var bookings = _repositoryWrapper.Actions.GetBookings(guestId);
+                var bookings = _repositoryWrapper.Actions.GetBookings(guest.Id);
 
                 _loggerManager.LogInfo($"Bookings has returned");
                 return Ok(bookings);
@@ -48,10 +48,9 @@ namespace API.Controllers
         {
             try
             {
+                var host = Request.HttpContext.Items["User"] as ReturnProfileDto ?? throw new Exception("Unauthorized");
 
-                var hostId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
-
-                var bookings = _repositoryWrapper.Actions.GetGuests(hostId);
+                var bookings = _repositoryWrapper.Actions.GetGuests(host.Id);
 
                 _loggerManager.LogInfo($"Bookings has returned");
                 return Ok(bookings);
@@ -98,7 +97,10 @@ namespace API.Controllers
             try
             {
                 var item = _mapper.Map<BookingGuests>(service);
-                item.GuestId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
+
+                var user = Request.HttpContext.Items["User"] as ReturnProfileDto ?? throw new Exception("Unauthorized");
+
+                item.GuestId = user.Id;
 
                 _repositoryWrapper.Actions.AddBookGuest(item);
                 _repositoryWrapper.Save();

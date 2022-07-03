@@ -29,7 +29,7 @@ namespace API.Controllers
             try
             {
                 var app = _mapper.Map<Apartments>(apartment);
-                var user = (ReturnProfileDto)Request.HttpContext.Items["User"];
+                var user = Request.HttpContext.Items["User"] as ReturnProfileDto ?? throw new Exception("Unauthorized");
 
                 app.OwnerId = user.Id;
                 _repositoryWrapper.Apartment.AddApartment(app);
@@ -51,9 +51,9 @@ namespace API.Controllers
         {
             try
             {
-                var userId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
+                var user = Request.HttpContext.Items["User"] as ReturnProfileDto ?? throw new Exception("Unauthorized");
 
-                _repositoryWrapper.Apartment.UpdateApartment(userId, update);
+                _repositoryWrapper.Apartment.UpdateApartment(user.Id, update);
                 _repositoryWrapper.Save();
 
                 _loggerManager.LogInfo($"Appartnent Updated");
@@ -72,7 +72,7 @@ namespace API.Controllers
         {
             try
             {
-                var user = Request.HttpContext.Items["User"] as ReturnProfileDto;
+                var user = Request.HttpContext.Items["User"] as ReturnProfileDto ?? throw new Exception("Unauthorized");
 
                 var apartment = _repositoryWrapper.Apartment.GetUserApartment(user.Id);
 

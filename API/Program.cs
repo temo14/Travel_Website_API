@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
+// My Extensions
 builder.Services.ConfigureCors();
 builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureMySqlContext<RepositoryContext>(builder.Configuration.GetConnectionString("AltexAppCon"));
@@ -15,14 +16,7 @@ builder.Services.ConfigureRepositoryWrapper();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.ConfigureJWT();
-//builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAuthentication().AddCookie();
-
-//builder.Services.AddAuthentication("BasicAuthentication")
-//                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>
-//                ("BasicAuthentication", null);
-//builder.Services.AddAuthorization();
-
 
 
 builder.Services.AddControllers();
@@ -56,6 +50,7 @@ app.UseCors("*");
 
 app.UseRouting();
 
+// auth middleware
 app.UseMiddleware<API.Extensions.AuthenticationMiddleware>();
 
 app.UseAuthentication();

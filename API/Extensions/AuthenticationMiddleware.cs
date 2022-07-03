@@ -36,21 +36,22 @@ namespace API.Extensions
                 return;
             }
 
-            var serId = repository.JWT.ValidateToken(token);
+            var userId = repository.JWT.ValidateToken(token);
 
-            if (serId != null)
+            if (userId != null)
             {
-                context.Items["User"] = repository.User.GetProfile(Guid.Parse(serId));
+                context.Items["User"] = repository.User.GetProfile(Guid.Parse(userId));
+
+                var claim = new ClaimsIdentity(new Claim[] { new Claim("Id", userId) },
+                                    CookieAuthenticationDefaults.AuthenticationScheme);
+
+                context.User = new ClaimsPrincipal(claim);
             }
             else
             {
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Invalid username or password.");
             }
-            var claim = new ClaimsIdentity(new Claim[] { new Claim("Id", serId) },
-                     CookieAuthenticationDefaults.AuthenticationScheme);
-
-            context.User = new ClaimsPrincipal(claim);
 
             await context.AuthenticateAsync();
 

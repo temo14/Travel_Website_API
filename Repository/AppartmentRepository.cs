@@ -26,6 +26,7 @@ namespace Repository
             var apartment = Context.Apartments.FirstOrDefault(x => x.Id == apartmentId);
             if (apartment == null) throw new ArgumentNullException("Apartment doesnot exists");
 
+            // See if apartment is booked, and if so sent info and dates.
             var avaliabilty = from bg in Context.BookingGuests
                               where bg.HostId == apartment.OwnerId && bg.status == Status.Accepted
                               join guests in Context.Users on bg.GuestId equals guests.Id
@@ -48,12 +49,15 @@ namespace Repository
         public Apartments? GetUserApartment(Guid? userId)
         {
             if (userId == null) throw new ArgumentNullException("userId");
+
             return Context.Apartments.FirstOrDefault(i => i.OwnerId == userId);
         }
 
         public void UpdateApartment(Guid? ownerId, ApartmentBase update)
         {
             var apartment = Context.Apartments.FirstOrDefault(i => i.OwnerId == ownerId);
+
+            // check which properties is updating.
             if (apartment != null)
             {
                 apartment.Address = update.Address ?? apartment.Address;

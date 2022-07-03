@@ -16,7 +16,8 @@ namespace Repository
         }
 
         public void AddBookGuest(BookingGuests service)
-        {
+        {  
+            // Search accepted requests dates. 
             var item = _context.BookingGuests.FirstOrDefault(i => i.HostId == service.HostId && i.status == Status.Accepted
                                                                 && i.From <= service.To && service.From <= i.To);
             if (item == null)
@@ -40,7 +41,6 @@ namespace Repository
                          Image = app.Image,
                          Avaliable = null
                      };
-
             SearchByCity(ref result, search.City);
 
             // Filter with beds.
@@ -49,12 +49,11 @@ namespace Repository
                 result = result.Where(i => i.NumOfBeds == search.Bedsfilter);
             }
 
-            bool checkDateRange = search.From != null && search.To != null;
-            /*date.HostId == app.OwnerId && date.status == Status.Accepted*/
+            bool checkDates = search.From != null && search.To != null;
 
+            // modify Avaliabilite info in IQueryble.
             List<SearcResultApartmentsDto> list = new();
-
-            if (checkDateRange)
+            if (checkDates)
             {
                 foreach (var item in result)
                 {
@@ -66,11 +65,11 @@ namespace Repository
 
                     list.Add(item);
                 }
-                result = result.OrderBy(x => x.Avaliable);
                 result = list.AsQueryable();
+                result = result.OrderByDescending(x => x.Avaliable);
             }
 
-            // Sort
+            // Sorting.
             Sort(ref result, search.OrderBy);
 
             return PagedList<SearcResultApartmentsDto>.ToPagedList(result,
@@ -101,7 +100,8 @@ namespace Repository
         {
             var guests = _context.BookingGuests.Where(o => o.HostId == Id).ToList();
             if (guests != null)
-            {
+            { 
+                // return guest users with their request status.
                 return from g in guests
                        join u in _context.Users.AsEnumerable()
                        on g.GuestId equals u.Id
@@ -129,10 +129,11 @@ namespace Repository
             // Check if apartment is already booked
             if (update.Status == Status.Accepted.ToString())
             {
-                var checkDate = _context.BookingGuests.FirstOrDefault(x => x.status == Status.Accepted
-               && x.From <= request.To && request.From <= x.To) ?? throw new Exception("Date Already Booked");
+                var checkDate = _context.BookingGuests.FirstOrDefault(x => x.HostId == request.HostId
+               && x.status == Status.Accepted
+               && x.From <= request.To && request.From <= x.To);
+                if (checkDate != null) throw new Exception("Date Already Booked");
             }
-
 
             request.status = (Status)Enum.Parse(typeof(Status), update.Status);
 
@@ -140,10 +141,7 @@ namespace Repository
 
         private void SearchByCity(ref IQueryable<SearcResultApartmentsDto> apartments, string? city)
         {
-            if (!apartments.Any() || string.IsNullOrEmpty(city))
-            {
-                apartments = apartments.Where(x => x.City.StartsWith(city) || city == null);
-            }
+            if (!apartments.Any() || string.IsNullOrEmpty(city)) return;
 
             apartments = apartments.Where(a => a.City.ToLower().Contains(city.Trim().ToLower()));
         }
@@ -155,12 +153,13 @@ namespace Repository
                     apartments = apartments.OrderByDescending(x => x.NumOfBeds);
                     break;
                 case "DistanceFromCenter desc":
-                    apartments.OrderByDescending(x => x.DistanceFromCenter);
+                    apartments = apartments.OrderByDescending(x => x.DistanceFromCenter);
                     break;
                 case "DistanceFromCenter":
-                    apartments= apartments.OrderBy(x => x.DistanceFromCenter);
+                    apartments = apartments.OrderBy(x => x.DistanceFromCenter);
                     break;
                 case "NumOfBeds":
+                    apartments = apartments.OrderBy(x => x.NumOfBeds);
                     break;
                 default:
                     break;

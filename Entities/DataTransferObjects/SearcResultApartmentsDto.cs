@@ -9,7 +9,7 @@ namespace Entities.DataTransferObjects
     public class SearcResultApartmentsDto
     {
         public Guid? Id { get; set; }
-        public string? City { get; set; }
+        public string City { get; set; } = string.Empty;
         public string? Address { get; set; }
         public int NumOfBeds { get; set; }
         public string? Image { get; set; }

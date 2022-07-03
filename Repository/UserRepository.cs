@@ -18,13 +18,14 @@ namespace Repository
         public void CreateUser(User user)
         {
             var check = Context.Users.FirstOrDefault(i => i.Email == user.Email);
+
             if (check != null) throw new Exception("Email already exists");
             Create(user);
         }
 
         public ReturnProfileDto GetProfile(Guid userId)
         {
-            var user = Context.Users.Where(user => user.Id.Equals(userId)).FirstOrDefault() ??
+            var user = Context.Users.FirstOrDefault(user => user.Id.Equals(userId)) ??
                 throw new NullReferenceException("User doesnot exists");
             
             return new ReturnProfileDto()
@@ -45,12 +46,14 @@ namespace Repository
 
             if (acc != null) return acc;
 
-            throw new NullReferenceException();
+            throw new NullReferenceException("Invalid Login attempt");
         }
         
         public void UpdateUser(ReturnProfileDto update)
         {
             var user = Context.Users.FirstOrDefault(i => i.Id == update.Id);
+
+            // check which properties is updating.
             if (user != null)
             {
                 user.Email = update.Email ?? user.Email;
