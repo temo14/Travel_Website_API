@@ -48,24 +48,24 @@ namespace Repository
 
             throw new NullReferenceException("Invalid Login attempt");
         }
-        
+
         public void UpdateUser(ReturnProfileDto update)
         {
             var user = Context.Users.FirstOrDefault(i => i.Id == update.Id);
+            if (user == null) throw new ArgumentException();
 
             // check which properties is updating.
-            if (user != null)
-            {
-                user.Email = update.Email ?? user.Email;
 
-                user.FirstName = update.FirstName ?? user.FirstName;
+            user.Email = update.Email ?? user.Email;
 
-                user.LastName = update.LastName ?? user.LastName;
+            user.FirstName = update.FirstName ?? user.FirstName;
 
-                user.Image = update.Image ?? user.Image;
+            user.LastName = update.LastName ?? user.LastName;
 
-                user.Description = update.Description ?? user.Description;
-            }
+            user.Image = update.Image ?? user.Image;
+
+            user.Description = update.Description ?? user.Description;
+
         }
     }
 }

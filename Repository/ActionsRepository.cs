@@ -41,6 +41,8 @@ namespace Repository
                          Image = app.Image,
                          Avaliable = null
                      };
+            if (result == null) throw new NullReferenceException("There is no apartments yet.");
+
             SearchByCity(ref result, search.City);
 
             // Filter with beds.
@@ -138,6 +140,8 @@ namespace Repository
             request.status = (Status)Enum.Parse(typeof(Status), update.Status);
 
         }
+
+
 
         private void SearchByCity(ref IQueryable<SearcResultApartmentsDto> apartments, string? city)
         {

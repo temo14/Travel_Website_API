@@ -43,7 +43,7 @@ namespace Repository
                                   Status = bg.status.ToString()
                               };
 
-            return new { Apartment = apartment, Avalibilities = avaliabilty };
+            return new { Apartment = apartment, Avaliabilities = avaliabilty };
         }
 
         public Apartments? GetUserApartment(Guid? userId)
@@ -56,28 +56,27 @@ namespace Repository
         public void UpdateApartment(Guid? ownerId, ApartmentBase update)
         {
             var apartment = Context.Apartments.FirstOrDefault(i => i.OwnerId == ownerId);
+            if (apartment == null) throw new ArgumentException();
 
             // check which properties is updating.
-            if (apartment != null)
-            {
-                apartment.Address = update.Address ?? apartment.Address;
+            apartment.Address = update.Address ?? apartment.Address;
 
-                apartment.DistanceFromCenter = update.DistanceFromCenter == default ? apartment.DistanceFromCenter : update.DistanceFromCenter;
+            apartment.DistanceFromCenter = update.DistanceFromCenter == default ? apartment.DistanceFromCenter : update.DistanceFromCenter;
 
-                apartment.NumOfBeds = update.NumOfBeds == default ? 1 : update.NumOfBeds;
+            apartment.NumOfBeds = update.NumOfBeds == default ? 1 : update.NumOfBeds;
 
-                apartment.City = update.City ?? apartment.City;
+            apartment.City = update.City ?? apartment.City;
 
-                apartment.Description = update.Description ?? apartment.Description;
+            apartment.Description = update.Description ?? apartment.Description;
 
-                apartment.Image = update.Image ?? apartment.Image;
+            apartment.Image = update.Image ?? apartment.Image;
 
 
-                apartment.Gym = update.Gym ?? false;
-                apartment.Parking = update.Parking ?? false;
-                apartment.Pool = update.Pool ?? false;
-                apartment.Wifi = update.Wifi ?? false;
-            }
+            apartment.Gym = update.Gym ?? false;
+            apartment.Parking = update.Parking ?? false;
+            apartment.Pool = update.Pool ?? false;
+            apartment.Wifi = update.Wifi ?? false;
+
         }
     }
 }
