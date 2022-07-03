@@ -21,7 +21,7 @@ namespace Repository
             Create(apartment);
         }
 
-        public ApartmentDetails GetApartmentDetails(Guid? apartmentId)
+        public object GetApartmentDetails(Guid? apartmentId)
         {
             var apartment = Context.Apartments.FirstOrDefault(x => x.Id == apartmentId);
             if (apartment == null) throw new ArgumentNullException("Apartment doesnot exists");
@@ -29,13 +29,20 @@ namespace Repository
             var avaliabilty = from bg in Context.BookingGuests
                               where bg.HostId == apartment.OwnerId && bg.status == Status.Accepted
                               join guests in Context.Users on bg.GuestId equals guests.Id
-                              select new AvaliabilityInfo
+                              select new ReturnGuestsDto
                               {
-                                  Guest = guests,
+                                  Id = guests.Id,
                                   From = bg.From,
-                                  To = bg.To
+                                  To = bg.To,
+                                  Email = guests.Email,
+                                  Description = guests.Description,
+                                  LastName = guests.LastName,
+                                  FirstName = guests.FirstName,
+                                  Image = guests.Image,
+                                  Status = bg.status.ToString()
                               };
-            return new ApartmentDetails() { Apartment = apartment, Avalibilities = avaliabilty };
+
+            return new { Apartment = apartment, Avalibilities = avaliabilty };
         }
 
         public Apartments? GetUserApartment(Guid? userId)
@@ -49,23 +56,23 @@ namespace Repository
             var apartment = Context.Apartments.FirstOrDefault(i => i.OwnerId == ownerId);
             if (apartment != null)
             {
-                apartment.Address = update.Address == null || update.Address == default ? apartment.Address : update.Address;
+                apartment.Address = update.Address ?? apartment.Address;
 
                 apartment.DistanceFromCenter = update.DistanceFromCenter == default ? apartment.DistanceFromCenter : update.DistanceFromCenter;
 
-                apartment.NumOfBeds = update.NumOfBeds == default ? apartment.NumOfBeds : update.NumOfBeds;
+                apartment.NumOfBeds = update.NumOfBeds == default ? 1 : update.NumOfBeds;
 
-                apartment.City = update.City == null ? apartment.City : update.City;
+                apartment.City = update.City ?? apartment.City;
 
-                apartment.Description = update.Description == null ? apartment.Description : update.Description;
+                apartment.Description = update.Description ?? apartment.Description;
 
-                apartment.Image = update.Image == null ? apartment.Image : update.Image;
+                apartment.Image = update.Image ?? apartment.Image;
 
 
-                apartment.Gym = update.Gym is not null ? apartment.Gym : update.Gym;
-                apartment.Parking = update.Parking is not null ? apartment.Parking : update.Parking;
-                apartment.Pool = update.Pool is not null ? apartment.Pool : update.Pool;
-                apartment.Wifi = update.Wifi is not null ? apartment.Wifi : update.Wifi;
+                apartment.Gym = update.Gym ?? false;
+                apartment.Parking = update.Parking ?? false;
+                apartment.Pool = update.Pool ?? false;
+                apartment.Wifi = update.Wifi ?? false;
             }
         }
     }

@@ -15,10 +15,10 @@ namespace Repository
             _context = context;
         }
 
-        public void AddBook_Guest(BookingGuests service)
+        public void AddBookGuest(BookingGuests service)
         {
             var item = _context.BookingGuests.FirstOrDefault(i => i.HostId == service.HostId && i.status == Status.Accepted
-                                                                && !(i.From <= service.To && service.From <= i.To));
+                                                                && i.From <= service.To && service.From <= i.To);
             if (item == null)
                 _context.BookingGuests.Add(service);
             else
@@ -121,13 +121,20 @@ namespace Repository
             return null;
         }
 
-        public void Updatebookings_guests(Guid id, string status)
+        public void UpdateBookingsGuests(UpdateStatus update)
         {
-            var request = _context.BookingGuests.FirstOrDefault(i => i.Id == id);
+            var request = _context.BookingGuests.FirstOrDefault(i => i.Id == update.id);
+            if (request == null || update.Status == null) throw new NullReferenceException($"Invaild update request");
 
-            if (request == null) throw new NullReferenceException($"Id - {id} doesnot exists");
+            // Check if apartment is already booked
+            if (update.Status == Status.Accepted.ToString())
+            {
+                var checkDate = _context.BookingGuests.FirstOrDefault(x => x.status == Status.Accepted
+               && x.From <= request.To && request.From <= x.To) ?? throw new Exception("Date Already Booked");
+            }
 
-            request.status = (Status)Enum.Parse(typeof(Status), status);
+
+            request.status = (Status)Enum.Parse(typeof(Status), update.Status);
 
         }
 

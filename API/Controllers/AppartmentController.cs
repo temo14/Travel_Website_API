@@ -22,7 +22,7 @@ namespace API.Controllers
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
         }
-        [HttpPost("")]
+        [HttpPost]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult AddApartment([FromBody]ApartmentBase apartment)
         {
@@ -46,7 +46,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("updateApartment")]
+        [HttpPut]
         public IActionResult UpdateApartment([FromBody]ApartmentBase update)
         {
             try
@@ -66,24 +66,8 @@ namespace API.Controllers
                 return BadRequest($"{ex.Message}");
             }
         }
-        [HttpGet("ApartmentDetails")]
-        public IActionResult GetApartmentDetails(Guid apartmentId)
-        {
-            try
-            {
-                var apartment = _repositoryWrapper.Apartment.GetApartmentDetails(apartmentId);
 
-                _loggerManager.LogInfo($"Appartnent returned");
-
-                return Ok(apartment);
-            }
-            catch (Exception ex)
-            {
-                _loggerManager.LogError($"Something went wrong GetApartmentById action: {ex.Message}");
-                return BadRequest($"{ex.Message}");
-            }
-        }
-        [HttpGet("UserApartment")]
+        [HttpGet]
         public IActionResult GetUserApartment()
         {
             try
@@ -102,5 +86,24 @@ namespace API.Controllers
                 return BadRequest($"{ex.Message}");
             }
         }
+
+        [HttpGet("details")]
+        public IActionResult GetApartmentDetails(Guid apartmentId)
+        {
+            try
+            {
+                var apartment = _repositoryWrapper.Apartment.GetApartmentDetails(apartmentId);
+
+                _loggerManager.LogInfo($"Appartnent returned");
+
+                return Ok(apartment);
+            }
+            catch (Exception ex)
+            {
+                _loggerManager.LogError($"Something went wrong GetApartmentById action: {ex.Message}");
+                return BadRequest($"{ex.Message}");
+            }
+        }
+
     }
 }

@@ -24,6 +24,7 @@ namespace API.Controllers
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
         }
+
         [HttpGet("MyBookings")]
         public IActionResult GetBookings()
         {
@@ -99,7 +100,7 @@ namespace API.Controllers
                 var item = _mapper.Map<BookingGuests>(service);
                 item.GuestId = (Request.HttpContext.Items["User"] as ReturnProfileDto).Id;
 
-                _repositoryWrapper.Actions.AddBook_Guest(item);
+                _repositoryWrapper.Actions.AddBookGuest(item);
                 _repositoryWrapper.Save();
 
                 _loggerManager.LogInfo($"Booking_Guests Added");
@@ -113,19 +114,19 @@ namespace API.Controllers
             }
         }
         [HttpPut("UpdateStatus")]
-        public IActionResult UpdateBookingGuests(Guid id, string status)
+        public IActionResult UpdateBookingGuests([FromBody]UpdateStatus update)
         {
             try
             {
-                if(id != Guid.Empty && !string.IsNullOrEmpty(status))
+                if(update.id != Guid.Empty && !string.IsNullOrEmpty(update.Status))
                 {
-                    _repositoryWrapper.Actions.Updatebookings_guests(id, status);
+                    _repositoryWrapper.Actions.UpdateBookingsGuests(update);
                     _repositoryWrapper.Save();
-                    _loggerManager.LogInfo($"Status {id} updated");
+                    _loggerManager.LogInfo($"Status {update.id} updated");
 
                     return StatusCode(200);
                 }
-                _loggerManager.LogWarn($"Invalid {id} status update Parametres");
+                _loggerManager.LogWarn($"Invalid {update.id} status update Parametres");
                 return StatusCode(404);
                 
             }

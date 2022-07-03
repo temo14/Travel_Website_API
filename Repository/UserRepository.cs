@@ -53,15 +53,15 @@ namespace Repository
             var user = Context.Users.FirstOrDefault(i => i.Id == update.Id);
             if (user != null)
             {
-                user.Email = update.Email == null ? user.Email : update.Email;
+                user.Email = update.Email ?? user.Email;
 
-                user.FirstName = update.FirstName == null ? user.FirstName : update.FirstName;
+                user.FirstName = update.FirstName ?? user.FirstName;
 
-                user.LastName = update.LastName == null ? user.LastName : update.LastName;
+                user.LastName = update.LastName ?? user.LastName;
 
-                user.Image = update.Image == null ? user.Image : update.Image;
+                user.Image = update.Image ?? user.Image;
 
-                user.Description = update.Description == null ? user.Description : update.Description;
+                user.Description = update.Description ?? user.Description;
             }
         }
     }

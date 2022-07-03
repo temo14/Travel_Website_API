@@ -8,5 +8,7 @@ namespace Entities.Models
 {
     public class UpdateStatus
     {
+        public Guid id { get; set; }
+        public string? Status { get; set; }
     }
 }

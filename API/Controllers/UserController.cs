@@ -25,7 +25,7 @@ namespace Altex_Task.Controllers
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
         }
-        [HttpPost("Register")]
+        [HttpPost]
         [AllowAnonymous]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateUser([FromBody]UserCreationDto user)
@@ -47,7 +47,7 @@ namespace Altex_Task.Controllers
             }
         }
 
-        [HttpGet("getProfile")]
+        [HttpGet]
 
         public IActionResult GetProfile()
         {
@@ -62,7 +62,7 @@ namespace Altex_Task.Controllers
             }
         }
 
-        [HttpPut("/updateUser")]
+        [HttpPut]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
 
         public IActionResult UpdateUser([FromBody] ReturnProfileDto update)
